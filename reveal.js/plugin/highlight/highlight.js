@@ -1831,7 +1831,7 @@ hljs.registerLanguage('cal', function(hljs) {
         PROCEDURE
     ]
   };
-    
+
   return {
     case_insensitive: true,
     keywords: { keyword: KEYWORDS, literal: LITERALS },
@@ -5001,7 +5001,7 @@ hljs.registerLanguage('kotlin', function (hljs) {
   var KEYWORDS = 'val var get set class trait object public open private protected ' +
 	'final enum if else do while for when break continue throw try catch finally ' +
 	'import package is as in return fun override default companion reified inline volatile transient native';
-  
+
   return {
     keywords: {
       typename : 'Byte Short Char Int Long Boolean Float Double Void Unit Nothing',
@@ -5905,7 +5905,7 @@ hljs.registerLanguage('makefile', function(hljs) {
     aliases: ['mk', 'mak'],
     contains: [
       hljs.HASH_COMMENT_MODE,
-      VARIABLE,
+      VARIABLE, // this (and the next line) were necessary for correct functioning w/in  markdown in reveal.js
       hljs.QUOTE_STRING_MODE,
       {
         begin: /^\w+\s*\W*=/, returnBegin: true,
@@ -5924,7 +5924,7 @@ hljs.registerLanguage('makefile', function(hljs) {
       },
       {
         className: 'title',
-        begin: /^[\w]+:/
+        begin: /^[\w]+:/ // Removed everything after the ":" b/c targets w/ dependencies weren't showing up as targets
       },
       {
         className: 'phony',
