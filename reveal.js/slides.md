@@ -80,9 +80,30 @@ target: dependency1 dependency2
 When we say `make definitive_plot.png`, make builds that target and everything needed to create it.
 
 
-## Example R Script (fits a model from train & tests on 
+## Example R Script (fits a model w/ train.csv and evaluates w/ test.csv)
 
 ## Move R script to makefile
+
+```makefile
+
+working/score.txt: input/train.csv input/test.csv
+	Rscript train_and_test.R score.csv train.csv test.csv
+
+```
+
+Aside:
+
+(Show how to avoid repition in output/input names)
+
+## Want to change the scoring function
+
+Make training a separate step so we don't have to repeat it to add a scoring metric.
+
+## Interactively Adjust Scoring  
+
+```r
+if (interactive) ...
+```
 
 ## Partial Plots
 
