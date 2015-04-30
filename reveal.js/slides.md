@@ -14,13 +14,11 @@
 	- Add step for partial plots (starting interactively)
 	- Show how to reuse partial plot makefile code
 	- Navigating so many results is hard - using Shiny app
-7. Tradeoffs in representation of intermediate files: having CSVs to look at can help you debug
-8. Combatting brittleness:
+6. Combatting brittleness:
 	- Helper functions to make assertions about input types
 	- Assertions about expected results
 	- CI server
 	- use of hipchat w/ CI server
-9. Alternatives to Make
 
 ----
 
