@@ -123,84 +123,12 @@ Multiple slides:
 	+ print args from make in copy/pastable form (for debugging)
 
 
-# Make training it's own step
+## Make training it's own step
 
-# Add step for variable importance [or partial plots?]
-
-# Loop over feature sets, models
-
-# [For output directories, use ".sentinel" files]?
-
-mydir/.sentinel: 
-
-Touch mydir/.sentinel at the end of every script
-
-at bottom of R script:
-
-touch_sentinel(mydir)
-
-or should we handle this in the makefile?
-
-makefile helper function
-
-# Make-level parallelism
-
-Advantages of doing the parallelism here:
-
-- OS takes care of scheduling
-- No need to learn anything about how to put parallelism in your code
-- Easier debugging
-
-# Inspecting write out intermediate files for debugging
-
-For some things a database would be easier, but there's a simplicity to CSVs. Easy to look and them and see if something is wrong.
-
-depends on the sort of data, of course.
-
-# Assertions about results
-
-RSCRIPT = Rscript
-
-output.csv: input.csv
-	$(RSCRIPT) evaluate_model.R
-
-Replace 
-
-RSCRIPT = Rscript
-
-with 
-
-RSCRIPT = (Ben's thing)
+## Add step for variable importance [or partial plots?]
 
 
-
-# Use of RMarkdown (etc.) for documents
-
-Quick iteration b/c the computations are all done already
-
-# config file
-
-
-# Shiny 
-
-
-# conttest for automatic rebuilds
-
-
-# Input type assertions
-
-in the Rscript:
-
-args = get_command_args()
-#input_file = args[1]
-
-input_file = input_file(args[1])
-
-num_splits = input_integer(args[2])
-
-
-
-# Plugging in pieces to the dependency graph
+## Reusing make code - Plugging in pieces to the dependency graph
 
 Uncouple both your scripts and makefile code from the particular application at hand.
 
@@ -216,16 +144,114 @@ assert that $(TRAIN_CSV) variable is defined
 
 
 
-# CI server: notifications that it broke
+Import from external makefile
 
-# CI server for sharing results
+## Loop over feature sets, models
 
-# Other
-
-drake "branch"
+(move each step to inside loop)
 
 
 
+## [For output directories, use ".sentinel" files]?
+
+```makefile
+mydir/.sentinel: (dependencies)
+	recipe
+```
+
+Need to update timestamp of `mydir/.sentinel` at the end of every script:
+
+```r
+touch_sentinel(mydir)
+```
+
+Could do this in recipe instead:
+
+...
+
+But doing it in the script has less duplication of code if we use the same script in multiple places.
+
+## Make-level parallelism
+
+(show off our loop)
+
+Advantages of doing the parallelism here:
+
+- OS takes care of scheduling
+- No need to learn anything about how to put parallelism in your code
+- Easier debugging
+
+## config file
+
+Move settings (models, feature sets, etc.) to `Config.mk`
+
+
+## Intermediate outputs as CSV files makes inspecting them easy
+
+For some things a database would be easier, but there's a simplicity to CSVs. Easy to look and them and see if something is wrong.
+
+depends on the sort of data, of course.
+
+## Input type assertions
+
+In the Rscript:
+
+args = get_command_args()
+#input_file = args[1]
+
+input_file = input_file(args[1])
+
+num_splits = input_integer(args[2])
+
+
+
+## Assertions about results
+
+(incorporating checks that automatically run after each step)
+
+Replace 
+
+```makefile
+RSCRIPT = Rscript
+```
+
+with 
+
+```makefile
+RSCRIPT = (Ben's thing)
+```
+
+
+## Use of RMarkdown (etc.) for documents
+
+Tweaking visualizations etc. based on computations than are already done.
+
+
+## conttest for automatic rebuilds
+
+As soon as a change is made, rebuild.
+
+```bash
+conttest 'make report.html' .
+```
+
+(Build `report.html` every time there is a change in the current directory)
+
+
+
+## Shiny 
+
+Navigating static results becomes a pain. Expose results in an interactive fashion. Shiny is good for this.
+
+
+
+## CI server: notifications that it broke
+
+## CI server for sharing results
+
+
+
+## Alternatives to Make
 
 
 
