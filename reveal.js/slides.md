@@ -1,20 +1,68 @@
 
-
-## [Problem Example 1: Story of difficulty reproducing results in academia]
+1. the problem
+2. What experience am I drawing on? (briefly describe the team Kaggle had working on oil & gas)
+3. Broad overview of what makes a good process
+4. What's make?
+5. Use example to demonstrate key ideas:
+	- Getting started with a makefile
+		- initial script fits a model and evaluates it on test set
+	- Motivation for breaking into 2 steps: Want to adjust scoring metric w/o 
+	- Break train/test into 2 steps
+	- Add more metrics to test script (starting interactively)
+		+ test script producers a chart showing metrics for each model
+	- Loop over models (show off parallel execution)
+	- Add step for partial plots (starting interactively)
+	- Show how to reuse partial plot makefile code
+	- Navigating so many results is hard - using Shiny app
+7. Tradeoffs in representation of intermediate files: having CSVs to look at can help you debug
+8. Combatting brittleness:
+	- Helper functions to make assertions about input types
+	- Assertions about expected results
+	- CI server
+	- use of hipchat w/ CI server
+9. Alternatives to Make
 
 ----
 
-## [Problem Example 2: Personal story of difficulty reproducing results at Allstate]
+<h2>
+	Data Workflows for:
+	<ul style="list-style: none;">
+		<li>Iteration</li>
+		<li>Collaboration</li>
+		<li>Reproducibility</li>
+	</ul>
+</h2>
+<p>
+	<small>
+		<a href="http://davidchudzicki.com.com">David Chudzicki (Kaggle)</a>
+		/
+		<a href="http://twitter.com/dchudz">@dchudz</a>
+	</small>
+</p>
+                
+Note:
+
+For other data scientists to improve, build on, or even just trust your analysis, they need to be able to reproduce it. Even if you have shared code and data, reproducing your analysis may be difficult: which code was executed against which data in what order? And even if the steps are clear, rerunning downstream steps to see your new results after changes upstream can be a tedious process.
+
+This talk will demonstrate the workflow and tools we used to increase our productivity and enjoyment by reducing grunt work and making it easier to build on each other's work. We used GNU Make as a clear way to represent what each step does, the inputs it depends on, and the output it produces. As we iterate on our analysis, makefiles allow us to conveniently execute only the steps that depend on code or other inputs that have changed since the last run. I'll walk through an example of creating a project, adding each step as a modular script, and reusing these scripts in different contexts. Since interactive exploration (and debugging) is a big part of data science, I'll demonstrate techniques for conveniently going back and forth between batch execution via makefiles and working interactively. 
 
 ----
 
-## [Problem: Understanding where things came from is painful.)
-
-(Show big dependency graph. Emphasize that it's often just in people's heads.)
+(Story about difficulty reproducing results in academia)
 
 ----
 
-## Problem: Friction in asking for details
+(Personal story of difficulty reproducing results at Allstate)
+
+----
+
+(Understanding where things came from is painful.)
+
+- (Show big dependency graph. Emphasize that it's often just in people's heads.)
+
+----
+
+(Friction in asking for details)
 
 You're at a meeting where someone presents some results. Do you bother asking for details? (Will that be taken as doubt/criticism?)
 
@@ -22,10 +70,9 @@ More likely to look into details (to build on or improve) if they're already ope
 
 ----
 
-##  Problem: Hard to get up to speed on a new project
+(Hard to get up to speed on a new project)
 
 ----
-
 
 ## Problem: The code doesn't work anymore
 
@@ -122,8 +169,6 @@ Multiple slides:
 	+ get args from make
 	+ print args from make in copy/pastable form (for debugging)
 
-
-## Make training it's own step
 
 ## Add step for variable importance [or partial plots?]
 
