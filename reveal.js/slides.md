@@ -195,22 +195,27 @@ Rebuild only when needed
 
 ----
 
-## What's make?
-
-Primarily used for compiling software from source dependencies.
-
-```r
-f <- function(a,b) a + b
-```
+## Make
 
 ```makefile
-
-target: dependency1 dependency2
+intermediate_output: input1 input2
 	[shell command to create output from inputs]
 
+final_output: intermediate_output
+	[shell command to create output from inputs]
 ```
 
-When we say `make definitive_plot.png`, make builds that target and everything needed to create it.
+![](output/whats_make.png)
+
+--
+
+[picture of graph]
+
+At the shell:
+
+```shell
+make final_output
+```
 
 ----
 
