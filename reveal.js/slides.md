@@ -1,5 +1,8 @@
 Outline
 
+0. I'm going to tell you:
+	- (quickly) why it's a problem that data scientists often aren't automating their analysis pipelines
+	- show one approach to automating pipelines 
 1. the problem
 2. What experience am I drawing on? (briefly describe the team Kaggle had working on oil & gas)
 3. Broad overview of what makes a good process
@@ -56,15 +59,51 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 
 ----
 
+## Kaggle
+
+Note: 
+
+Also did consulting
+
+--
+
+## Informal data pipeline
+
+[picture of someone asking someone something]
+
+--
+
+## Difficult to join project
+
+[picture of someone confused]
+
+--
+
+## Automated pipeline
+
+[picture of happy people?]
+
+Note:
+
+Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses.
+
+----
+
+## Reproducibility
+
+Reinhart & Rogoff
+
+--
+
 > A well-known study completed by economists Ken Rogoff and Carmen Reinhart confirms this common-sense conclusion. 
 
 > <cite>2013 Republican Budget Proposal</cite>
 
-----
+--
 
 ![](http://www.washingtonpost.com/blogs/wonkblog/files/2013/04/reinhart_rogoff_coding_error_0.png)
 
-----
+--
 
 > What should I do if I cannot reproduce experimental published results?
 > 
@@ -76,7 +115,7 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 > 
 > <cite>(Accepted Answer)</cite>
 
-----
+--
 
 ![](images/reproduce_quickly.png)
 
@@ -86,56 +125,65 @@ Note:
 https://academia.stackexchange.com/questions/10096/how-to-replicate-others-results-quickly
 
 
-----
+--
 
 (Personal story of difficulty reproducing results at when I worked at an insurance company)
 
-----
+--
+
+Old code doesn't work anymore
+
+--
+
+
+## Where did these results come from?
 
 (Understanding where things came from is painful.)
 
 - (Show big dependency graph. Emphasize that it's often just in people's heads.)
 
-----
+--
 
-(Friction in asking for details)
+## Might not bother asking for details
 
-You're at a meeting where someone presents some results. Do you bother asking for details? (Will that be taken as doubt/criticism?)
+Do you bother asking for details? (Will that be taken as doubt/criticism?)
 
 More likely to look into details (to build on or improve) if they're already open.
 
-----
+--
 
-(Hard to get up to speed on a new project)
-
-----
-
-Old code doesn't work anymore
-
-----
+## Slow iteration
 
 Iterating is hard if executing downstream steps is tedious
 
- - Even if the code still runs, this is slow.
-
 ----
 
-(Kaggle - mostly competitions. Did some consulting. Had these problems.)
+## What makes a good process?
 
-Brought engineers into our data science process. They taught us a lot! 
+--
 
-----
+Explicit 
 
-Charactaristics of a good process:
+Note:
 
-- explicit 
-- automated
-- build only the desired individual analyses and what they depend on
-- rebuild only when necessary
+- What outputs can we build?
+- How are those built? 
 
-----
+--
 
-Rest of the talk:
+Automated
+
+--
+
+Build only what we ask for
+
+--
+
+Rebuild only when needed
+
+--
+
+## Rest of the talk:
 
 - Individual scripts that each do one thing
 - Tying these scripts to makefiles
@@ -147,7 +195,7 @@ Rest of the talk:
 
 ----
 
-What's make?
+## What's make?
 
 Primarily used for compiling software from source dependencies.
 
@@ -165,6 +213,8 @@ target: dependency1 dependency2
 When we say `make definitive_plot.png`, make builds that target and everything needed to create it.
 
 ----
+
+## Example
 
 Example R Script (fits a model w/ train.csv and evaluates w/ test.csv)
 
