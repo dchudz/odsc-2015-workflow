@@ -21,9 +21,12 @@ library(xgboost)
 print("training xgboost with sparseMatrix")
 bst <- xgboost(data = train[feature_names], label = train$saledate, max.depth = 2, eta = 1, nround = 2, nthread = 2)
 
-rf <- randomForest(train[feature_names], train$SalePrice)
+rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+?randomForest
+
 
 summary(train[feature_names])
+summary(train$SalePrice)
 
 qplot(train$ProductGroupDesc)
 
