@@ -2,7 +2,8 @@ intermediate_output: input/input1 input/input2
 	echo "We made an intermediate output" > intermediate_output
 
 final_output: intermediate_output
-	cp intermediate_output final_output && echo "...and then we made the final output." >> final_output
+	cp intermediate_outputt final_output
+	echo "...and then we made the final output." >> final_output
 
 LIST = 0 1 2 3 4 5
 define make-example-target

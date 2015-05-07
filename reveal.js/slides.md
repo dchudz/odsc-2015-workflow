@@ -198,24 +198,25 @@ Rebuild only when needed
 ## Make
 
 ```makefile
-intermediate_output: input1 input2
-	[shell command to create output from inputs]
+intermediate_output: input/input1 input/input2
+	echo "We made an intermediate output" > intermediate_output
 
 final_output: intermediate_output
-	[shell command to create output from inputs]
+	cp intermediate_output final_output
+	echo "...and then we made the final output." >> final_output
 ```
 
 ![](output/whats_make.png)
 
 --
 
-[picture of graph]
-
 At the shell:
 
 ```shell
 make final_output
 ```
+
+![](output/whats_make.png)
 
 ----
 
