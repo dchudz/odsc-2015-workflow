@@ -55,3 +55,24 @@ assert_is_single_value <- function(should_be_single_value) {
   stopifnot(!is.na(should_be_single_value))
   stopifnot(!is.null(should_be_single_value))
 }
+
+pipeline_output_file <- function(path) {
+  # Ensure that the parent directory for output files exists and delete existing versions of the file.
+  file <- ensure_parent_directory_exists(path)
+  
+  return(file)
+}
+
+ensure_parent_directory_exists <- function(filePath) {
+  # Make sure the parent directory of some path exists.
+  # Returns the path as a convenience for inline use.
+  #
+  # Example: Save(content, ensure_parent_directory_exists(path))
+  directoryPath <- dirname(filePath)
+  
+  if (!file.exists(directoryPath)) {
+    dir.create(directoryPath, showWarnings = TRUE, recursive = TRUE)
+  }
+  
+  return(filePath)
+}
