@@ -57,6 +57,28 @@ For other data scientists to improve, build on, or even just trust your analysis
 
 This talk will demonstrate the workflow and tools we used to increase our productivity and enjoyment by reducing grunt work and making it easier to build on each other's work. We used GNU Make as a clear way to represent what each step does, the inputs it depends on, and the output it produces. As we iterate on our analysis, makefiles allow us to conveniently execute only the steps that depend on code or other inputs that have changed since the last run. I'll walk through an example of creating a project, adding each step as a modular script, and reusing these scripts in different contexts. Since interactive exploration (and debugging) is a big part of data science, I'll demonstrate techniques for conveniently going back and forth between batch execution via makefiles and working interactively. 
 
+From Anthony:
+
+Tell two stories. (R&R then Allstate.)
+
+Probly remove Stack Exchange examples.
+
+Then go through the points showing how each one was illustrated in the story.
+
+Why make vs. python shell script etc.?
+
+Signpost shiny-- shouldn't come out of nowhere 
+- gave the sense that make is the whole solution
+- frame it as a solution w/ 2 pieces: make & shiny
+
+in describing kaggle & consulting work -- paired data scientists w/ software engineers (emphasize as something giving me a unique view)
+
+if using testing / CI server, signpost it.
+
+make?
+make+shiny?
+make+shiny+ci?
+
 ----
 
 ## Kaggle
