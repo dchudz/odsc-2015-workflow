@@ -4,9 +4,14 @@ library(ggplot2)
 library(scales)
 source("src/metrics.R")
 source("src/theme.R")
+source("src/arg_helpers.R")
+source("src/process_features.R")
 
-train <- read_csv("working/train_test_split/train.csv")
-test <- read_csv("working/train_test_split/test.csv")
+args <- command_args()
+
+output_file <- args[1]
+train <- read_csv(args[2])
+test <- read_csv(args[3])
 
 train <- process_features(train)
 test <- process_features(test)
@@ -17,7 +22,7 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 test$Predicted <- predict(rf, test[feature_names])
 test_mae <- mae$Evaluate(test$SalePrice, test$Predicted)
 
-ggplot(test) + 
+actual_predicted_plot <- ggplot(test) + 
   geom_point(aes(x=SalePrice, y=Predicted), alpha=.03) +
   ggtitle(sprintf("Test Set MAE: %s", comma_format(digits=3)(test_mae))) +
   xlab("Actual Sale Price ($)") +
@@ -26,5 +31,5 @@ ggplot(test) +
   scale_x_continuous(labels = comma, limits=range(test$SalePrice)) +
   coord_fixed()
 
-
-
+print(output_file)
+ggsave(filename = output_file, plot = actual_predicted_plot)
