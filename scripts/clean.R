@@ -16,13 +16,13 @@ cols_to_keep <- c("SalesID", "SalePrice", "MachineID", "datasource", "auctioneer
 
 selected_columns_and_joined <- original_train[cols_to_keep] %>% left_join(machine, by="MachineID")
 
-selected_columns_and_joined_horsepower <- subset(selected_columns_and_joined, PrimarySizeBasis == "Horsepower")
+subset_to_keep <- subset(selected_columns_and_joined, PrimarySizeBasis == "Horsepower")
 
-selected_columns_and_joined_horsepower$HorsePower <- 
-  (selected_columns_and_joined_horsepower$PrimaryLower + selected_columns_and_joined_horsepower$PrimaryUpper)/2
+subset_to_keep$HorsePower <- (subset_to_keep$PrimaryLower + subset_to_keep$PrimaryUpper)/2
 
-product_groups_to_keep <- selected_columns_and_joined_horsepower$ProductGroupDesc %>% table %>% Filter(function(x) x > 100, .) %>% names
+product_groups_to_keep <- subset_to_keep$ProductGroupDesc %>% table %>% Filter(function(x) x > 100, .) %>% names
 
-selected_columns_and_joined_horsepower_prodgroups <- subset(selected_columns_and_joined_horsepower, ProductGroupDesc %in% product_groups_to_keep)
+subset_to_keep <- subset(subset_to_keep, ProductGroupDesc %in% product_groups_to_keep)
+subset_to_keep <- subset(subset_to_keep, YearMade != 1000)
 
-write_csv(selected_columns_and_joined_horsepower_prodgroups, cleaned_input_file)
+write_csv(subset_to_keep, cleaned_input_file)
