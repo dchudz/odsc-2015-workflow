@@ -1,6 +1,9 @@
 working/predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
 	Rscript scripts/model.R $@ $^
 
+## Commented this out for now b/c I'm pretending `input/` is actually the input.
+## (Simplifying the fact that there are steps to create that)
+
 # original_working/cleaned_input.csv: original_input/Train.csv original_input/Machine_Appendix.csv scripts/clean.R
 # 	Rscript scripts/clean.R $@ $^
 
