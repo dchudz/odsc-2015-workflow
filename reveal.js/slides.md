@@ -246,8 +246,73 @@ make final_output
 
 ![](https://kaggle2.blob.core.windows.net/competitions/kaggle/3316/media/bulldozer.jpg)
 
-----
+--
 
+```r
+# read data
+train <- read_csv("working/train_test_split/train.csv")
+test <- read_csv("working/train_test_split/test.csv")
+
+# process features
+train <- process_features(train)
+test <- process_features(test)
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+
+# make predictions
+test$Predicted <- predict(rf, test[feature_names])
+test_mae <- mae$Evaluate(test$SalePrice, test$Predicted)
+	
+# generate plot
+ggplot(test) + 
+  geom_point(aes(x=SalePrice, y=Predicted), alpha=.03) +
+  ggtitle(sprintf("Test Set MAE: %s", comma_format(digits=3)(test_mae))) +
+  xlab("Actual Sale Price ($)") +
+  ylab("Predicted Sale Price ($)") +
+  scale_y_continuous(labels = comma, limits=range(test$SalePrice)) +
+  scale_x_continuous(labels = comma, limits=range(test$SalePrice)) +
+  coord_fixed()
+```
+
+--
+
+<img src="output/predicted_vs_actual.png" height="400">
+
+--
+
+Makefile:
+
+```makefile
+predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
+	Rscript scripts/model.R $@ $^
+```
+
+R:
+
+```r
+args <- command_args()
+# args: 
+# c("working/predicted_vs_actual.png", "input/train.csv", "input/test.csv", "scripts/model.R")
+
+output_file <- args[1]
+train <- read_csv(args[2])
+test <- read_csv(args[3])
+
+.
+.
+.
+
+ggsave(filename = output_file, plot = actual_predicted_plot)
+```
+--
+
+![](output/bulldozer_graph_1.png)
+
+<img src="output/predicted_vs_actual.png" height="400">
+
+--
 
 
 ----
