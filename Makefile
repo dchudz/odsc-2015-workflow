@@ -17,7 +17,7 @@ working/predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
 
 all: input/train_test_split/_
 
-graphs: reveal.js/output/whats_make.png reveal.js/output/bulldozer_graph_1.png
+reveal: reveal.js/output/whats_make.png reveal.js/output/bulldozer_graph_1.png reveal.js/output/predicted_vs_actual.png
 
 reveal.js/output/whats_make.png:
 	cd whats_make && make final_output -Bnd | make2graph | dot -Tpng -o ../reveal.js/output/whats_make.png
@@ -25,5 +25,7 @@ reveal.js/output/whats_make.png:
 reveal.js/output/bulldozer_graph_1.png:
 	make working/predicted_vs_actual.png -Bnd | make2graph | dot -Tpng -o $@
 
+reveal.js/output/predicted_vs_actual.png: working/predicted_vs_actual.png
+	cp $^ $@
 
 all: reveal.js/output/whats_make.png
