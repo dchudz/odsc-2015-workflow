@@ -242,9 +242,13 @@ make final_output
 
 ----
 
-## Example
+## Example: Predict sale price of farm equipment
 
-Example R Script (fits a model w/ train.csv and evaluates w/ test.csv)
+![](https://kaggle2.blob.core.windows.net/competitions/kaggle/3316/media/bulldozer.jpg)
+
+----
+
+
 
 ----
 
