@@ -257,6 +257,40 @@ test <- read_csv("working/train_test_split/test.csv")
 train <- process_features(train)
 test <- process_features(test)
 
+```
+
+--
+
+```r
+# read data
+train <- read_csv("working/train_test_split/train.csv")
+test <- read_csv("working/train_test_split/test.csv")
+
+# process features
+train <- process_features(train)
+test <- process_features(test)
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+
+# make predictions
+test$Predicted <- predict(rf, test[feature_names])
+test_mae <- mae$Evaluate(test$SalePrice, test$Predicted)
+
+```
+
+--
+
+```r
+# read data
+train <- read_csv("working/train_test_split/train.csv")
+test <- read_csv("working/train_test_split/test.csv")
+
+# process features
+train <- process_features(train)
+test <- process_features(test)
+
 # fit model
 feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
 rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
