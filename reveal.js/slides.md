@@ -276,7 +276,6 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 
 # make predictions
 test$Predicted <- predict(rf, test[feature_names])
-test_mae <- mae$Evaluate(test$SalePrice, test$Predicted)
 
 ```
 
@@ -297,12 +296,10 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 
 # make predictions
 test$Predicted <- predict(rf, test[feature_names])
-test_mae <- mae$Evaluate(test$SalePrice, test$Predicted)
 	
 # generate plot
 ggplot(test) + 
-  geom_point(aes(x=SalePrice, y=Predicted), alpha=.03) +
-  ggtitle(sprintf("Test Set MAE: %s", comma_format(digits=3)(test_mae))) +
+  geom_point(aes(x=SalePrice, y=Predicted), alpha=.03)
   xlab("Actual Sale Price ($)") +
   ylab("Predicted Sale Price ($)") +
   scale_y_continuous(labels = comma, limits=range(test$SalePrice)) +
