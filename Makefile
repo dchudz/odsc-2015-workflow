@@ -1,5 +1,6 @@
 working/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/test_predictions.csv
 	Rscript $^ $@ 
+	open $@
 
 working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 	Rscript $^ $@ 
@@ -25,7 +26,7 @@ reveal: reveal.js/output/whats_make.png reveal.js/output/bulldozer_graph_1.png r
 reveal.js/output/whats_make.png:
 	cd whats_make && make final_output -Bnd | make2graph | dot -Tpng -o ../reveal.js/output/whats_make.png
 
-reveal.js/output/bulldozer_graph_1.png:
+reveal.js/output/bulldozer_graph_2.png:
 	make working/predicted_vs_actual.png -Bnd | make2graph | dot -Tpng -o $@
 
 reveal.js/output/predicted_vs_actual.png: working/predicted_vs_actual.png

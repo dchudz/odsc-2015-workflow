@@ -20,4 +20,4 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 # make predictions
 test$Predicted <- predict(rf, test[feature_names])
 
-write_csv(test[c("SalePrice", "Predicted")], output_file)
+write_csv(test[c("SalePrice", "Predicted", feature_names)], output_file)
