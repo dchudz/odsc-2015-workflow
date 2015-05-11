@@ -299,7 +299,8 @@ test$Predicted <- predict(rf, test[feature_names])
 	
 # generate plot
 ggplot(test) + 
-  geom_point(aes(x=SalePrice, y=Predicted), alpha=.03)
+  geom_point(aes(x=SalePrice, y=Predicted), alpha=.03) + 
+  ggtitle("Actual vs. Predicted Sale Price") +
   xlab("Actual Sale Price ($)") +
   ylab("Predicted Sale Price ($)") +
   scale_y_continuous(labels = comma, limits=range(test$SalePrice)) +
