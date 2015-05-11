@@ -311,6 +311,14 @@ ggplot(test) +
 --
 
 <img src="output/predicted_vs_actual.png" height="400">
+--
+
+Makefile:
+
+```makefile
+predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
+	Rscript scripts/model.R $@ $^
+```
 
 --
 

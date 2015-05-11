@@ -1,5 +1,8 @@
-working/predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
-	Rscript scripts/model.R $@ $^
+working/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/test_predictions.csv
+	Rscript $^ $@ 
+
+working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@ 
 
 ## Commented this out for now b/c I'm pretending `input/` is actually the input.
 ## (Simplifying the fact that there are steps to create that)
