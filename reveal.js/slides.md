@@ -391,19 +391,7 @@ Note:
 - How do we run w/ the arguments? Execute make in command line w/ argument-printing
 - Tweak interactively
 - Run as make step
-
-----
-
-conttest for automatic rebuilds
-
-As soon as a change is made, rebuild.
-
-```bash
-conttest 'make report.html' .
-```
-
-(Build `report.html` every time there is a change in the current directory)
-
+- (maybe demonstrate conttest?)
 
 ----
 
