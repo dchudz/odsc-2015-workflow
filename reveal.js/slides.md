@@ -386,7 +386,11 @@ working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 
 Note:
 
-Interactively adjust scoring script
+- Create make step
+- Open scoring script
+- How do we run w/ the arguments? Execute make in command line w/ argument-printing
+- Tweak interactively
+- Run as make step
 
 ----
 
