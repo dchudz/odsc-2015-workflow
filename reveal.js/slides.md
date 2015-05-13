@@ -30,6 +30,27 @@ Simpler title: Data Workflows to Iterate More Easily and Quickly
 
 There are so many points of failure... we could mess one up so easily! All this stuff we're doing by hand, wasting our time, getting it wrong... we can make it happen automatically instead! and correctly!
 
+From Anthony:
+
+Tell two stories. (R&R then Allstate.)
+
+Probly remove Stack Exchange examples.
+
+Then go through the points showing how each one was illustrated in the story.
+
+Why make vs. python shell script etc.?
+
+Signpost shiny- shouldn't come out of nowhere 
+- gave the sense that make is the whole solution
+- frame it as a solution w/ 2 pieces: make & shiny
+
+in describing kaggle & consulting work - paired data scientists w/ software engineers (emphasize as something giving me a unique view)
+
+if using testing / CI server, signpost it.
+
+make?
+make+shiny?
+make+shiny+ci?
 
 ----
 
@@ -56,28 +77,6 @@ Note:
 For other data scientists to improve, build on, or even just trust your analysis, they need to be able to reproduce it. Even if you have shared code and data, reproducing your analysis may be difficult: which code was executed against which data in what order? And even if the steps are clear, rerunning downstream steps to see your new results after changes upstream can be a tedious process.
 
 This talk will demonstrate the workflow and tools we used to increase our productivity and enjoyment by reducing grunt work and making it easier to build on each other's work. We used GNU Make as a clear way to represent what each step does, the inputs it depends on, and the output it produces. As we iterate on our analysis, makefiles allow us to conveniently execute only the steps that depend on code or other inputs that have changed since the last run. I'll walk through an example of creating a project, adding each step as a modular script, and reusing these scripts in different contexts. Since interactive exploration (and debugging) is a big part of data science, I'll demonstrate techniques for conveniently going back and forth between batch execution via makefiles and working interactively. 
-
-From Anthony:
-
-Tell two stories. (R&R then Allstate.)
-
-Probly remove Stack Exchange examples.
-
-Then go through the points showing how each one was illustrated in the story.
-
-Why make vs. python shell script etc.?
-
-Signpost shiny-- shouldn't come out of nowhere 
-- gave the sense that make is the whole solution
-- frame it as a solution w/ 2 pieces: make & shiny
-
-in describing kaggle & consulting work -- paired data scientists w/ software engineers (emphasize as something giving me a unique view)
-
-if using testing / CI server, signpost it.
-
-make?
-make+shiny?
-make+shiny+ci?
 
 ----
 
@@ -316,8 +315,8 @@ ggplot(test) +
 Makefile:
 
 ```makefile
-predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
-	Rscript scripts/model.R $@ $^
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript scripts/model.R input/train.csv input/test.csv
 ```
 
 --
@@ -325,8 +324,17 @@ predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
 Makefile:
 
 ```makefile
-predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
-	Rscript scripts/model.R $@ $^
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@
+```
+
+--
+
+Makefile:
+
+```makefile
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@
 ```
 
 R:
@@ -334,62 +342,51 @@ R:
 ```r
 args <- command_args()
 # args: 
-# c("working/predicted_vs_actual.png", "input/train.csv", "input/test.csv", "scripts/model.R")
+# c("input/train.csv", "input/test.csv", n"working/predicted_vs_actual.png")
 
-output_file <- args[1]
-train <- read_csv(args[2])
-test <- read_csv(args[3])
-
+train <- read_csv(args[1])
+test <- read_csv(args[2])
+output_file <- args[3]
 .
 .
 .
 
 ggsave(filename = output_file, plot = actual_predicted_plot)
 ```
+
+Shell:
+
+```shell
+make working/predicted_vs_actual.png
+```
+
 --
 
 ![](output/bulldozer_graph_1.png)
 
 <img src="output/predicted_vs_actual.png" height="400">
 
+----
+
+- Want to tweak the chart
+- Don't want to retrain the model with every change we make 
+
+Solution:
+
+- Make training a separate step so we don't have to repeat it to add a scoring metric.
+
 --
 
-
-----
-
-Move R script to makefile
-
 ```makefile
-score.txt: train.csv test.csv
-	Rscript train_and_test.R score.csv train.csv test.csv
+working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@ 
 ```
 
-Aside:
+--
 
-(Show how to avoid repition in output/input names)
-
-----
-
-Want to change the scoring function
-
-Make training a separate step so we don't have to repeat it to add a scoring metric.
-
-----
+Note:
 
 Interactively adjust scoring script
-
-```r
-...
-if (interactive) ...
-...
-```
-
-(Add more metrics. Output is a chart.)
-
-- refactor if(interactive) to: get_args_else
-	+ assign default args for interactive use
-	+ get args from make
-	+ print args from make in copy/pastable form (for debugging)
 
 ----
 

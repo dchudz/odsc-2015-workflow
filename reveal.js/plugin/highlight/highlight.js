@@ -5924,7 +5924,7 @@ hljs.registerLanguage('makefile', function(hljs) {
       },
       {
         className: 'title',
-        begin: /^[\w.]+:/ // Removed everything after the ":" b/c targets w/ dependencies weren't showing up as targets
+        begin: /^[\w.\/]+:/ // Removed everything after the ":" b/c targets w/ dependencies weren't showing up as targets
       },
       {
         className: 'phony',
