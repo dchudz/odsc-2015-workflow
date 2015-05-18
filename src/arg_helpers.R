@@ -77,3 +77,11 @@ ensure_parent_directory_exists <- function(filePath) {
   
   return(filePath)
 }
+
+pipeline_input_file_vector <- function(space_separated_paths) {
+  split_arg <- function(arg) Filter(function(s) nchar(s) > 0, strsplit(arg, " ")[[1]])
+  paths <- split_arg(space_separated_paths)
+  stopifnot(length(paths) > 0)
+  files <- sapply(paths, pipeline_input_file, USE.NAMES = FALSE)
+  return(files)
+}

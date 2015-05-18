@@ -1,17 +1,32 @@
-make open-[targetname]
+MODELS := rf_2_trees lm
 
-make print-[varname]
 
-conventions?
+define make-model-targets
 
-granularity of steps?
+working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+	Rscript $$^ $$@
 
-working/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/test_predictions.csv
-	Rscript $^ $@
+working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $$^ $(MODEL) $$@
+
+working/models/model_performance.png: working/models/$(MODEL)/test_predictions.csv
+
+actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
+
+endef
+
+$(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
+
+working/models/model_performance.png: scripts/model_performance.R
+	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
 	open $@
 
-working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
-	Rscript $^ $@ 
+all: working/models/model_performance.png actual-vs-predicted
+
+.PHONY: all actual-vs-predicted
+
+
+
 
 ## Commented this out for now b/c I'm pretending `input/` is actually the input.
 ## (Simplifying the fact that there are steps to create that)
@@ -26,18 +41,24 @@ working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 # input/train.csv: input/_
 # input/test.csv: input/_
 
-
-all: input/train_test_split/_
-
 reveal: reveal.js/output/whats_make.png reveal.js/output/bulldozer_graph_1.png reveal.js/output/predicted_vs_actual.png
 
 reveal.js/output/whats_make.png:
 	cd whats_make && make final_output -Bnd | make2graph | dot -Tpng -o ../reveal.js/output/whats_make.png
 
-reveal.js/output/bulldozer_graph_2.png:
-	make working/predicted_vs_actual.png -Bnd | make2graph | dot -Tpng -o $@
+reveal.js/output/bulldozer_graph_predicted_vs_actual.png:
+	make actual-vs-predicted -Bnd | make2graph | dot -Tpng -o $@
 
 reveal.js/output/predicted_vs_actual.png: working/predicted_vs_actual.png
 	cp $^ $@
 
-all: reveal.js/output/whats_make.png
+reveal.js/output/bulldozer_graph_actual_vs_predicted.png:
+	make actual-vs-predicted -Bnd | make2graph | dot -Tpng -o $@
+
+reveal.js/output/bulldozer_graph_model_performance.png:
+	make working/models/model_performance.png -Bnd | make2graph | dot -Tpng -o $@
+
+reveal.js/output/bulldozer_graph_all.png:
+	make all -Bnd | make2graph | dot -Tpng -o $@
+
+graphs: reveal.js/output/bulldozer_graph_all.png reveal.js/output/bulldozer_graph_model_performance.png reveal.js/output/bulldozer_graph_predicted_vs_actual.png

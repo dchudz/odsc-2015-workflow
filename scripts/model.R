@@ -2,12 +2,19 @@ library(readr)
 library(randomForest)
 source("src/arg_helpers.R")
 source("src/process_features.R")
+source("src/source_eval.R")
+source("src/models.R")
 
-args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "working/test_predictions.csv"))
+set.seed(0)
+
+args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "rf_2_trees", "working/rf_2_trees/test_predictions.csv"))
 
 train <- read_csv(args[1])
 test <- read_csv(args[2])
-output_file <- args[3]
+model_name <- args[3]
+output_file <- ensure_parent_directory_exists(args[4])
+
+model <- source_eval("src/models.R", models[[model_name]])
 
 # process features
 train <- process_features(train)
@@ -15,10 +22,10 @@ test <- process_features(test)
 
 # fit model
 feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
-rf <- randomForest(train[feature_names], train$SalePrice, ntree=2, mtry=4)
 
-
+fitted <- model$fit(train, "SalePrice", feature_names)
+  
 # make predictions
-test$Predicted <- predict(rf, test[feature_names])
+test$Predicted <- model$predict(fitted, test)
 
-write_csv(test[c("SalePrice", "Predicted", feature_names)], output_file)
+write.csv(test[c("SalePrice", "Predicted", feature_names)], output_file, row.names=FALSE)
