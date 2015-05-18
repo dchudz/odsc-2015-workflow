@@ -1,5 +1,14 @@
+make open-[targetname]
+
+make print-[varname]
+
+conventions?
+
+granularity of steps?
+
 working/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/test_predictions.csv
-	Rscript $^ $@ 
+	Rscript $^ $@
+	open $@
 
 working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 	Rscript $^ $@ 

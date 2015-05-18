@@ -502,3 +502,7 @@ should I discuss checking results into github (for easy side-by-side comparison)
 
 https://team.kaggle.com/wiki/R
 https://team.kaggle.com/wiki/Makefile.CodingStyle
+
+Other resources:
+
+https://www.youtube.com/watch?v=7B3n-5atLxM
