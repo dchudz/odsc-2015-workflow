@@ -24,33 +24,6 @@ Outline
 	- CI server
 	- use of hipchat w/ CI server
 
-D's comments:
-
-Simpler title: Data Workflows to Iterate More Easily and Quickly
-
-There are so many points of failure... we could mess one up so easily! All this stuff we're doing by hand, wasting our time, getting it wrong... we can make it happen automatically instead! and correctly!
-
-From Anthony:
-
-Tell two stories. (R&R then Allstate.)
-
-Probly remove Stack Exchange examples.
-
-Then go through the points showing how each one was illustrated in the story.
-
-Why make vs. python shell script etc.?
-
-Signpost shiny- shouldn't come out of nowhere 
-- gave the sense that make is the whole solution
-- frame it as a solution w/ 2 pieces: make & shiny
-
-in describing kaggle & consulting work - paired data scientists w/ software engineers (emphasize as something giving me a unique view)
-
-if using testing / CI server, signpost it.
-
-make?
-make+shiny?
-make+shiny+ci?
 
 ----
 
@@ -201,6 +174,14 @@ Build only what we ask for
 --
 
 Rebuild only when needed
+
+--
+
+Allow working interactively
+
+--
+
+Visualize output conveniently
 
 --
 
@@ -384,8 +365,9 @@ working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 
 --
 
-Note:
+(Live demo):
 
+- `git checkout two-make-steps-1`
 - Create make step
 - Open scoring script
 - How do we run w/ the arguments? Execute make in command line w/ argument-printing
@@ -395,7 +377,50 @@ Note:
 
 ----
 
-Loop over feature sets, models
+Loop over models
+
+--
+
+![](output/bulldozer_graph_predicted_vs_actual.png)
+
+--
+
+Replace this:
+
+```r
+.
+.
+.
+
+rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+.
+.
+.
+```
+
+--
+
+... with this:
+
+```
+.
+.
+.
+
+args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "rf_2_trees", "working/rf_2_trees/test_predictions.csv"))
+
+train <- read_csv(args[1])
+test <- read_csv(args[2])
+model_name <- args[3]
+output_file <- ensure_parent_directory_exists(args[4])
+
+model <- source_eval("src/models.R", models[[model_name]])
+.
+.
+.
+```
+
+--
 
 ----
 

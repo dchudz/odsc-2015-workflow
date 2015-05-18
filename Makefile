@@ -1,6 +1,5 @@
 MODELS := rf_2_trees lm
 
-
 define make-model-targets
 
 working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
