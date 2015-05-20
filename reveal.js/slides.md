@@ -99,28 +99,6 @@ Reinhart & Rogoff
 
 --
 
-> What should I do if I cannot reproduce experimental published results?
-> 
-> <cite>[StackExchange Question](https://academia.stackexchange.com/questions/20640/what-should-i-do-if-i-cannot-reproduce-experimental-published-results)</cite>
-
-<div></div>
-
-> ...trying to get exact agreement also on the details that they didn't describe in the original paper...
-> 
-> <cite>(Accepted Answer)</cite>
-
---
-
-![](images/reproduce_quickly.png)
-
-
-Note: 
-
-https://academia.stackexchange.com/questions/10096/how-to-replicate-others-results-quickly
-
-
---
-
 (Personal story of difficulty reproducing results at when I worked at an insurance company)
 
 --
@@ -183,19 +161,45 @@ Allow working interactively
 
 Visualize output conveniently
 
+----
+
+## Single Script?
+
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 400px; float: left;">
+<pre class="fragment"><code data-trim>
+do_step1()
+do_step2()
+do_step3()
+do_step4()
+do_step5()
+do_step6()
+do_step7()
+do_step8()
+</code></pre>
+    </div>
+    <div style="margin-left: 420px;">
+    	<ul style="list-style: none;">
+			<li class="fragment">&#x2713; Explicit</li>
+			<li class="fragment">&#x2713; Automated</li>
+			<li class="fragment">&#x2717; Build only what we ask for</li>
+			<li class="fragment">&#x2717; Rebuild only when needed</li>
+			<li class="fragment">&#x2754; Allow working interactively</li>
+			<li class="fragment">&#x2754; Visualize output conveniently</li>
+		</ul>
+    </div>
+</div>
+
+
 --
 
-## Rest of the talk:
+![](http://www.mr-edd.co.uk/static/blog/problem_dag_driven_builds/staticlib.png)
 
-- Individual scripts that each do one thing
-- Tying these scripts to makefiles
-- Conveniently going back and forth between: 
-	- execution via makefile
-	- interactive work
-- Checks to make sure we notice when something unexpected happened
-- How we made sure the code was run regularly
+Note:
 
-----
+This is a problem software engineers have worked on!
+
+--
 
 ## Make
 
@@ -323,7 +327,7 @@ R:
 ```r
 args <- command_args()
 # args: 
-# c("input/train.csv", "input/test.csv", n"working/predicted_vs_actual.png")
+# c("input/train.csv", "input/test.csv", "working/predicted_vs_actual.png")
 
 train <- read_csv(args[1])
 test <- read_csv(args[2])
@@ -349,7 +353,8 @@ make working/predicted_vs_actual.png
 
 ----
 
-- Want to tweak the chart
+Want to tweak the chart
+
 - Don't want to retrain the model with every change we make 
 
 Solution:
