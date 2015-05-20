@@ -1,4 +1,4 @@
-MODELS := rf_2_trees lm
+MODELS := rf lm
 
 define make-model-targets
 
@@ -12,17 +12,21 @@ working/models/model_performance.png: working/models/$(MODEL)/test_predictions.c
 
 actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
 
+residuals-app: working/models/$(MODEL)/test_predictions.csv
+
 endef
 
 $(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
 
 working/models/model_performance.png: scripts/model_performance.R
 	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
-	open $@
 
 all: working/models/model_performance.png actual-vs-predicted
 
 .PHONY: all actual-vs-predicted
+
+residuals-app:
+	Rscript launch_app.R residuals "$^"
 
 
 
@@ -50,6 +54,10 @@ reveal.js/output/bulldozer_graph_predicted_vs_actual.png:
 
 reveal.js/output/predicted_vs_actual.png: working/predicted_vs_actual.png
 	cp $^ $@
+
+reveal.js/output/model_performance.png: working/models/model_performance.png
+	cp $^ $@
+	
 
 reveal.js/output/bulldozer_graph_actual_vs_predicted.png:
 	make actual-vs-predicted -Bnd | make2graph | dot -Tpng -o $@

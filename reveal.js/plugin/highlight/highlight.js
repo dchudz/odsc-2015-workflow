@@ -5911,7 +5911,7 @@ hljs.registerLanguage('makefile', function(hljs) {
         begin: /^\w+\s*\W*=/, returnBegin: true,
         relevance: 0,
         starts: {
-          className: 'constant',
+          className: 'variable',
           end: /\s*\W*=/, excludeEnd: true,
           starts: {
             end: /$/,
@@ -5924,13 +5924,18 @@ hljs.registerLanguage('makefile', function(hljs) {
       },
       {
         className: 'title',
-        begin: /^[\w.\/]+:/ // Removed everything after the ":" b/c targets w/ dependencies weren't showing up as targets
+        begin: /^[\w.\/$\(\)-]+:/ // Removed everything after the ":" b/c targets w/ dependencies weren't showing up as targets
       },
       {
         className: 'phony',
         begin: /^\.PHONY:/, end: /$/,
         keywords: '.PHONY', lexemes: /[\.\w]+/
       },
+      {
+        className: 'pi',
+        begin: /^define|endef/, end: / /
+      },
+
       {
         begin: /^\t+/, end: /$/,
         relevance: 0,

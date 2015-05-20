@@ -3,8 +3,9 @@ library(magrittr)
 library(readr)
 source("src/arg_helpers.R")
 source("src/metrics.R")
+source("src/theme.R")
 
-args <- command_args_unless_interactive(c("working/models/rf_2_trees/test_predictions.csv working/models/lm/test_predictions.csv", 
+args <- command_args_unless_interactive(c("working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv", 
                                           "working/models/model_performance.png"))
 
 prediction_paths <- pipeline_input_file_vector(args[1])
@@ -18,5 +19,7 @@ performance_df$MAE <-
   Map(function(prediction_df) mae$Evaluate(prediction_df$SalePrice, prediction_df$Predicted), .) %>%
   unlist
 
-performance_plot <- ggplot(performance_df) + geom_bar(aes(x=ModelName, fill=ModelName, y=MAE), stat="identity")
+performance_plot <- ggplot(performance_df) + 
+  geom_bar(aes(x=ModelName, fill=ModelName, y=MAE), stat="identity") +
+  ggtitle("Test Set Model Performance")
 ggsave(filename = output_plot, plot = performance_plot)

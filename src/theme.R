@@ -1,1 +1,1 @@
-theme_set(theme_bw())
+theme_set(theme_light())

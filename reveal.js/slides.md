@@ -385,17 +385,62 @@ Loop over models
 
 --
 
-Replace this:
+In `fit.R`, replace this:
 
 ```r
 .
 .
 .
 
+train       <- read_csv(args[1])
+test        <- read_csv(args[2])
+output_file <- args[3]
+
+.
+.
+.
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
 rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+
 .
 .
 .
+```
+
+--
+
+... with:
+
+```r
+.
+.
+.
+
+train       <- read_csv(args[1])
+test        <- read_csv(args[2])
+model_name  <- args[3]
+output_file <- ensure_parent_directory_exists(args[4])
+
+model <- source_eval("src/models.R", models[[model_name]])
+
+.
+.
+.
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+fitted <- model$fit(train, "SalePrice", feature_names)
+  
+# make predictions
+test$Predicted <- model$predict(fitted, test)
+
+
+.
+.
+.
+
 ```
 
 --
@@ -409,116 +454,120 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 
 args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "rf_2_trees", "working/rf_2_trees/test_predictions.csv"))
 
-train <- read_csv(args[1])
-test <- read_csv(args[2])
-model_name <- args[3]
-output_file <- ensure_parent_directory_exists(args[4])
+train        <- read_csv(args[1])
+test         <- read_csv(args[2])
+model_name   <- args[3]
+output_file  <- ensure_parent_directory_exists(args[4])
 
 model <- source_eval("src/models.R", models[[model_name]])
 .
 .
 .
 ```
+	
+--
+
+```makefile
+MODELS := rf lm
+
+define make-model-targets
+
+working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+	Rscript $$^ $$@
+
+working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $$^ $(MODEL) $$@
+
+actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
+
+endef
+
+$(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
+```
+
+![](output/bulldozer_graph_predicted_vs_actual.png)
 
 --
 
-----
+(Demonstrate parallel make)
 
-Make parallelism
 
-(show off our loop)
+--
 
-Advantages of doing the parallelism here:
+Random Forest actual vs. predicted:
 
-- OS takes care of scheduling
-- No need to learn anything about how to put parallelism in your code
-- Easier debugging
+<img src="working/models/rf/predicted_vs_actual.png" height="600">
 
-----
+--
 
-Partial Plots
+Linear Model actual vs. predicted:
 
-- Want to do other things with the fitted model
-	- predictions on new test sit
-	- visualizations
+<img src="working/models/lm/predicted_vs_actual.png" height="600">
 
-(Start work interactively)
+--
+<img src="output/model_performance.png" height="600">
+	
+--
 
-----
+![](output/bulldozer_graph_model_performance.png)
 
-## [For output directories, use ".sentinel" files]?
+--
+
 
 ```makefile
-mydir/.sentinel: (dependencies)
-	recipe
+MODELS := rf lm
+
+define make-model-targets
+
+working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+	Rscript $$^ $$@
+
+working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $$^ $(MODEL) $$@
+
+working/models/model_performance.png: working/models/$(MODEL)/test_predictions.csv
+
+actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
+
+endef
+
+$(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
+
+working/models/model_performance.png: scripts/model_performance.R
+	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
 ```
 
-Need to update timestamp of `mydir/.sentinel` at the end of every script:
+--
+
+```bash
+Rscript \
+	scripts/model_performance.R \
+	"working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" \
+	working/models/model_performance.png
+```
+
+--
+
+In R:
 
 ```r
-touch_sentinel(mydir)
+> args
+[1] "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" 
+[2] "working/models/model_performance.png"
+
+> prediction_paths <- pipeline_input_file_vector(args[1])
+> prediction_paths
+[1] "working/models/rf/test_predictions.csv" 
+[2] "working/models/lm/test_predictions.csv"
 ```
 
-Could do this in recipe instead:
+--
 
-...
 
-But doing it in the script has less duplication of code if we use the same script in multiple places.
-
-----
-
-Reusing make code - Plugging in pieces to the dependency graph
-
-Uncouple both your scripts and makefile code from the particular application at hand.
-
-in the makefile that gets included:
-
-assert that `$(TRAIN_CSV)` variable is defined
-
-`include`
 
 ----
 
 
-## Input type assertions
-
-In the Rscript:
-
-```r
-args = get_command_args()
-#input_file = args[1]
-input_file = input_file(args[1])
-num_splits = input_integer(args[2])
-```
-
-----
-
-## Assertions about results
-
-(incorporating checks that automatically run after each step)
-
-Replace 
-
-```makefile
-RSCRIPT = Rscript
-```
-
-with 
-
-```makefile
-RSCRIPT = (Ben's thing)
-```
-
-----
-
-CI server: notifications that it broke 
-
-----
-
-CI server for sharing results 
-
-
-----
 
 ## (Not part of presentation, this is just for my own reference)
 

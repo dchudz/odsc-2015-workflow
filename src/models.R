@@ -28,6 +28,6 @@ create_linear_model <- function(...) {
 }
 
 models <- list(
-  rf_2_trees = create_random_forest(ntree = 2),
+  rf = create_random_forest(ntree = 2),
   lm = create_linear_model()
 )
