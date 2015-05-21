@@ -232,7 +232,7 @@ make final_output
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -245,7 +245,7 @@ test <- process_features(test)
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -265,7 +265,7 @@ test$Predicted <- predict(rf, test[feature_names])
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -324,7 +324,7 @@ working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
 
 R:
 
-```r
+```stylus
 args <- command_args()
 # args: 
 # c("input/train.csv", "input/test.csv", "working/predicted_vs_actual.png")
@@ -351,15 +351,15 @@ make working/predicted_vs_actual.png
 
 <img src="output/predicted_vs_actual.png" height="400">
 
-----
+--
 
-Want to tweak the chart
 
-- Don't want to retrain the model with every change we make 
-
-Solution:
-
-- Make training a separate step so we don't have to repeat it to add a scoring metric.
+<div style="width: 400px; float: left;">
+	<img src="output/bulldozer_graph_1.png">
+</div>
+<div style="margin-left: 420px;">
+	<img src="output/bulldozer_graph_2_no_loop.png" class="fragment">
+</div>
 
 --
 
@@ -392,7 +392,7 @@ Loop over models
 
 In `fit.R`, replace this:
 
-```r
+```stylus
 .
 .
 .
@@ -418,7 +418,7 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 
 ... with:
 
-```r
+```stylus
 .
 .
 .
@@ -446,28 +446,6 @@ test$Predicted <- model$predict(fitted, test)
 .
 .
 
-```
-
---
-
-... with this:
-
-```
-.
-.
-.
-
-args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "rf_2_trees", "working/rf_2_trees/test_predictions.csv"))
-
-train        <- read_csv(args[1])
-test         <- read_csv(args[2])
-model_name   <- args[3]
-output_file  <- ensure_parent_directory_exists(args[4])
-
-model <- source_eval("src/models.R", models[[model_name]])
-.
-.
-.
 ```
 	
 --
@@ -555,7 +533,7 @@ Rscript \
 
 In R:
 
-```r
+```stylus
 > args
 [1] "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" 
 [2] "working/models/model_performance.png"
@@ -566,7 +544,24 @@ In R:
 [2] "working/models/lm/test_predictions.csv"
 ```
 
+----
+
+Visualization
+
 --
+
+```makefile
+residuals-app:
+	Rscript launch_app.R residuals "$^"
+```
+
+(demo)
+
+1. we started out making lots of output charts
+2. slow to open the right ones, compare, etc.
+3. YearMade
+4. ProductSize
+
 
 
 

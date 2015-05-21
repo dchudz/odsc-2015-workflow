@@ -23,7 +23,7 @@ working/models/model_performance.png: scripts/model_performance.R
 
 all: working/models/model_performance.png actual-vs-predicted
 
-.PHONY: all actual-vs-predicted
+.PHONY: all actual-vs-predicted residuals-app
 
 residuals-app:
 	Rscript launch_app.R residuals "$^"

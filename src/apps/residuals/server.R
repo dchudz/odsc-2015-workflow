@@ -48,7 +48,7 @@ shinyServer(function(input, output) {
 		}
 		print(nrow(predictions))
 		predictions <- subset(predictions, ModelName %in% input$model_names)
-		predictions$Residual <- predictions$Predicted - predictions$SalePrice
+		predictions$Residual <-  predictions$SalePrice - predictions$Predicted
 		feature_name <- input$feature_name
 		if (class(predictions[[feature_name]]) %in% c("character", "factor")) {
 			sorted_levels <- predictions[[feature_name]] %>% table %>% sort %>% rev %>% names

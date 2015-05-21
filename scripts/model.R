@@ -25,7 +25,7 @@ test <- process_features(test)
 
 
 # fit model
-feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+feature_names <- c("SaleDate", "YearMade", "HorsePower", "ProductGroupDesc")
 
 fitted <- model$fit(train, "SalePrice", feature_names)
   
