@@ -63,29 +63,31 @@ Also did consulting
 
 ## Informal data pipeline
 
-[picture of someone asking someone something]
+<img src="http://www.clipartbest.com/cliparts/9TR/Rzy/9TRRzy88c.png" height="200px" style="background-color:white;" />
 
 --
 
 ## Difficult to join project
 
-[picture of someone confused]
+![](http://au.reachout.com/-/media/images/articles%202/computer%20guy.jpg)
 
 --
 
 ## Automated pipeline
 
-[picture of happy people?]
+<img src="http://www.bigbearautomation.com/images/icsnsr-2.gif" height="200px" style="background-color:white;" />
+
 
 Note:
 
-Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses.
+Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses. Reproducibility...
 
-----
+--
 
-## Reproducibility
+<img src="images/rr_paper.png" height="100px" style="background-color:white;" />
 
-Reinhart & Rogoff
+<img src="https://aaronrourke.files.wordpress.com/2014/01/debt-to-income.jpg" height="200px" style="background-color:white;" />
+
 
 --
 
@@ -93,9 +95,17 @@ Reinhart & Rogoff
 
 > <cite>2013 Republican Budget Proposal</cite>
 
+<img src="https://s3.amazonaws.com/s3.documentcloud.org/documents/408616/pages/republican-2013-budget-proposal-p1-normal.gif" height = "300px"/>
+
+
+
 --
 
 ![](http://www.washingtonpost.com/blogs/wonkblog/files/2013/04/reinhart_rogoff_coding_error_0.png)
+
+--
+
+![](http://www.toonpool.com/user/57241/files/reinhart_rogoff_apologetic_comic_1990409.jpg)
 
 --
 
