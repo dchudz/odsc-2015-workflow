@@ -1,8 +1,9 @@
 library(readr)
 library(randomForest)
-source("src/arg_helpers.R")
+
+library(pipelinehelpers)
+
 source("src/process_features.R")
-source("src/source_eval.R")
 source("src/models.R")
 
 set.seed(0)

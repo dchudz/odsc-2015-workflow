@@ -569,29 +569,34 @@ residuals-app:
 3. YearMade
 4. ProductSize
 
+----
+
+## Combatting Brittleness
+
+--
+
+Pipeline argument helper functions
+
+--
+
+Assertions in scripts
+
+--
+
+CI server
+
+--
+
+Hipchat w/ CI server
 
 
 
 ----
-
-
-
-## (Not part of presentation, this is just for my own reference)
-
-
-should I discuss checking results into github (for easy side-by-side comparison)? 
-
-https://team.kaggle.com/wiki/R
-https://team.kaggle.com/wiki/Makefile.CodingStyle
-
-Other resources:
-
-https://www.youtube.com/watch?v=7B3n-5atLxM
 
 --
 
 ## References
 
 - Conda for reproducible environments: http://continuum.io/blog/conda-data-science
-- Talk on how reproducibility saves you time
+- Talk on how reproducibility saves you time: https://www.youtube.com/watch?v=7B3n-5atLxM
 

@@ -1,6 +1,7 @@
 library(shiny)
 library(methods)
-source("src/arg_helpers.R")
+
+library(pipelinehelpers)
 
 args <- command_args_unless_interactive(c("residuals", "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv"))
 app_to_run <- args[1]

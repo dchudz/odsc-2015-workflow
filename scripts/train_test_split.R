@@ -1,6 +1,7 @@
 library(dplyr)
 library(readr)
-source("src/arg_helpers.R")
+
+library(pipelinehelpers)
 
 set.seed(0)
 
