@@ -109,7 +109,11 @@ Mostly will talk about how we appproached automating the pipeline, but first I w
 
 --
 
-(Personal story of difficulty reproducing results at when I worked at an insurance company)
+Building analysis dataset (every year) was slow and brittle.
+
+Note:
+
+My first job. Large insurance company.
 
 --
 
@@ -117,26 +121,19 @@ Old code doesn't work anymore
 
 --
 
-
-## Where did these results come from?
-
-(Understanding where things came from is painful.)
-
-- (Show big dependency graph. Emphasize that it's often just in people's heads.)
+Where did these results come from?
 
 --
 
-## Might not bother asking for details
+Might not bother asking for details
 
-Do you bother asking for details? (Will that be taken as doubt/criticism?)
+- Do you bother asking for details? (Will that be taken as doubt/criticism?)
 
-More likely to look into details (to build on or improve) if they're already open.
+- More likely to look into details (to build on or improve) if they're already open.
 
 --
 
-## Slow iteration
-
-Iterating is hard if executing downstream steps is tedious
+Iterating is slow if executing downstream steps is tedious
 
 ----
 
@@ -590,3 +587,11 @@ https://team.kaggle.com/wiki/Makefile.CodingStyle
 Other resources:
 
 https://www.youtube.com/watch?v=7B3n-5atLxM
+
+--
+
+## References
+
+- Conda for reproducible environments: http://continuum.io/blog/conda-data-science
+- Talk on how reproducibility saves you time
+
