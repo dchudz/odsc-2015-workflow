@@ -14,7 +14,7 @@ body {
 
 .reveal {
   font-family: 'Open Sans', sans-serif;
-  font-size: 30px;
+  font-size: 40px;
   font-weight: normal;
   color: #eee; }
 
@@ -107,7 +107,7 @@ body {
 .reveal blockquote {
   display: block;
   position: relative;
-  width: 70%;
+  width: 90%;
   margin: 20px auto;
   padding: 5px;
   font-style: italic;
@@ -123,7 +123,7 @@ body {
 .reveal pre {
   display: block;
   position: relative;
-  width: 90%;
+  width: 100%;
   margin: 20px auto;
   text-align: left;
   font-size: 0.55em;
