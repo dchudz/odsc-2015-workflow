@@ -24,12 +24,6 @@ Outline
 	- CI server
 	- use of hipchat w/ CI server
 
-D's comments:
-
-Simpler title: Data Workflows to Iterate More Easily and Quickly
-
-There are so many points of failure... we could mess one up so easily! All this stuff we're doing by hand, wasting our time, getting it wrong... we can make it happen automatically instead! and correctly!
-
 
 ----
 
@@ -57,63 +51,47 @@ For other data scientists to improve, build on, or even just trust your analysis
 
 This talk will demonstrate the workflow and tools we used to increase our productivity and enjoyment by reducing grunt work and making it easier to build on each other's work. We used GNU Make as a clear way to represent what each step does, the inputs it depends on, and the output it produces. As we iterate on our analysis, makefiles allow us to conveniently execute only the steps that depend on code or other inputs that have changed since the last run. I'll walk through an example of creating a project, adding each step as a modular script, and reusing these scripts in different contexts. Since interactive exploration (and debugging) is a big part of data science, I'll demonstrate techniques for conveniently going back and forth between batch execution via makefiles and working interactively. 
 
-From Anthony:
-
-Tell two stories. (R&R then Allstate.)
-
-Probly remove Stack Exchange examples.
-
-Then go through the points showing how each one was illustrated in the story.
-
-Why make vs. python shell script etc.?
-
-Signpost shiny-- shouldn't come out of nowhere 
-- gave the sense that make is the whole solution
-- frame it as a solution w/ 2 pieces: make & shiny
-
-in describing kaggle & consulting work -- paired data scientists w/ software engineers (emphasize as something giving me a unique view)
-
-if using testing / CI server, signpost it.
-
-make?
-make+shiny?
-make+shiny+ci?
-
 ----
 
-## Kaggle
+<img src="images/leaderboard.png" height="600px" style="background-color:white;" />
 
-Note: 
+--
 
-Also did consulting
+<img src="http://i.huffpost.com/gen/1280925/images/o-FRACKING-facebook.jpg" height="600px" style="background-color:white;" />
+
+
+
+
 
 --
 
 ## Informal data pipeline
 
-[picture of someone asking someone something]
+<img src="http://www.clipartbest.com/cliparts/9TR/Rzy/9TRRzy88c.png" height="200px" style="background-color:white;" />
 
 --
 
 ## Difficult to join project
 
-[picture of someone confused]
+![](http://au.reachout.com/-/media/images/articles%202/computer%20guy.jpg)
 
 --
 
 ## Automated pipeline
 
-[picture of happy people?]
+<img src="http://www.bigbearautomation.com/images/icsnsr-2.gif" height="200px" style="background-color:white;" />
+
 
 Note:
 
-Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses.
+Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses. Reproducibility...
 
-----
+--
 
-## Reproducibility
+<img src="images/rr_paper.png" height="100px" style="background-color:white;" />
 
-Reinhart & Rogoff
+<img src="https://aaronrourke.files.wordpress.com/2014/01/debt-to-income.jpg" height="200px" style="background-color:white;" />
+
 
 --
 
@@ -121,35 +99,33 @@ Reinhart & Rogoff
 
 > <cite>2013 Republican Budget Proposal</cite>
 
+<img src="https://s3.amazonaws.com/s3.documentcloud.org/documents/408616/pages/republican-2013-budget-proposal-p1-normal.gif" height = "300px"/>
+
+
+
 --
 
 ![](http://www.washingtonpost.com/blogs/wonkblog/files/2013/04/reinhart_rogoff_coding_error_0.png)
 
 --
 
-> What should I do if I cannot reproduce experimental published results?
-> 
-> <cite>[StackExchange Question](https://academia.stackexchange.com/questions/20640/what-should-i-do-if-i-cannot-reproduce-experimental-published-results)</cite>
-
-<div></div>
-
-> ...trying to get exact agreement also on the details that they didn't describe in the original paper...
-> 
-> <cite>(Accepted Answer)</cite>
+![](http://www.toonpool.com/user/57241/files/reinhart_rogoff_apologetic_comic_1990409.jpg)
 
 --
 
-![](images/reproduce_quickly.png)
+Building analysis dataset (every year) was slow and brittle.
 
+Note:
 
-Note: 
+My first job. Large insurance company.
 
-https://academia.stackexchange.com/questions/10096/how-to-replicate-others-results-quickly
+- basis for much analysis the rest of the year
+- when I arrived one of my first jobs was building this data set for homeowners insurance
+- a bunch of scripts that are run by hand
+- each may take hours to run
+- restart in the right place when it fails at night
+- my boss told me "save the logs" - but assuming I do save the logs, we've got some runs that succeeded and some that failed and if you're ever trying to diagnose something you're relying on me to accurately match up the logs
 
-
---
-
-(Personal story of difficulty reproducing results at when I worked at an insurance company)
 
 --
 
@@ -157,26 +133,21 @@ Old code doesn't work anymore
 
 --
 
-
-## Where did these results come from?
-
-(Understanding where things came from is painful.)
-
-- (Show big dependency graph. Emphasize that it's often just in people's heads.)
+Where did these results come from?
 
 --
 
-## Might not bother asking for details
+Might not bother asking for details
 
-Do you bother asking for details? (Will that be taken as doubt/criticism?)
+Note:
 
-More likely to look into details (to build on or improve) if they're already open.
+- Do you bother asking for details? (Will that be taken as doubt/criticism?)
+
+- More likely to look into details (to build on or improve) if they're already open.
 
 --
 
-## Slow iteration
-
-Iterating is hard if executing downstream steps is tedious
+Iterating is slow if executing downstream steps is tedious
 
 ----
 
@@ -205,17 +176,51 @@ Rebuild only when needed
 
 --
 
-## Rest of the talk:
+Allow working interactively
 
-- Individual scripts that each do one thing
-- Tying these scripts to makefiles
-- Conveniently going back and forth between: 
-	- execution via makefile
-	- interactive work
-- Checks to make sure we notice when something unexpected happened
-- How we made sure the code was run regularly
+--
+
+Visualize output conveniently
 
 ----
+
+## Single Script?
+
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 400px; float: left;">
+<pre class="fragment"><code data-trim>
+do_step1()
+do_step2()
+do_step3()
+do_step4()
+do_step5()
+do_step6()
+do_step7()
+do_step8()
+</code></pre>
+    </div>
+    <div style="margin-left: 420px;">
+    	<ul style="list-style: none;">
+			<li class="fragment">&#x2713; Explicit</li>
+			<li class="fragment">&#x2713; Automated</li>
+			<li class="fragment">&#x2717; Build only what we ask for</li>
+			<li class="fragment">&#x2717; Rebuild only when needed</li>
+			<li class="fragment">&#x2754; Allow working interactively</li>
+			<li class="fragment">&#x2754; Visualize output conveniently</li>
+		</ul>
+    </div>
+</div>
+
+
+--
+
+![](http://www.mr-edd.co.uk/static/blog/problem_dag_driven_builds/staticlib.png)
+
+Note:
+
+This is a problem software engineers have worked on!
+
+--
 
 ## Make
 
@@ -248,7 +253,7 @@ make final_output
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -261,7 +266,7 @@ test <- process_features(test)
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -281,7 +286,7 @@ test$Predicted <- predict(rf, test[feature_names])
 
 --
 
-```r
+```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
 test <- read_csv("working/train_test_split/test.csv")
@@ -316,8 +321,8 @@ ggplot(test) +
 Makefile:
 
 ```makefile
-predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
-	Rscript scripts/model.R $@ $^
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript scripts/model.R input/train.csv input/test.csv
 ```
 
 --
@@ -325,27 +330,42 @@ predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
 Makefile:
 
 ```makefile
-predicted_vs_actual.png: input/train.csv input/test.csv scripts/model.R
-	Rscript scripts/model.R $@ $^
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@
+```
+
+--
+
+Makefile:
+
+```makefile
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@
 ```
 
 R:
 
-```r
+```stylus
 args <- command_args()
 # args: 
-# c("working/predicted_vs_actual.png", "input/train.csv", "input/test.csv", "scripts/model.R")
+# c("input/train.csv", "input/test.csv", "working/predicted_vs_actual.png")
 
-output_file <- args[1]
-train <- read_csv(args[2])
-test <- read_csv(args[3])
-
+train <- read_csv(args[1])
+test <- read_csv(args[2])
+output_file <- args[3]
 .
 .
 .
 
 ggsave(filename = output_file, plot = actual_predicted_plot)
 ```
+
+Shell:
+
+```shell
+make working/predicted_vs_actual.png
+```
+
 --
 
 ![](output/bulldozer_graph_1.png)
@@ -355,161 +375,250 @@ ggsave(filename = output_file, plot = actual_predicted_plot)
 --
 
 
-----
+<div style="width: 400px; float: left;">
+	<img src="output/bulldozer_graph_1.png">
+</div>
+<div style="margin-left: 420px;">
+	<img src="output/bulldozer_graph_2_no_loop.png" class="fragment">
+</div>
 
-Move R script to makefile
+Note:
+
+- want to tweak chart w/o rerunning the model
+- separate into two steps
+
+
+--
 
 ```makefile
-score.txt: train.csv test.csv
-	Rscript train_and_test.R score.csv train.csv test.csv
+working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@ 
 ```
 
-Aside:
+--
 
-(Show how to avoid repition in output/input names)
+(Live demo)
+
+Note:
+
+- `git checkout two-make-steps-1`
+- Create make step
+- Open scoring script
+- How do we run w/ the arguments? Execute make in command line w/ argument-printing
+- Tweak interactively
+- Run as make step
+- (maybe demonstrate conttest?)
 
 ----
 
-Want to change the scoring function
+Loop over models
 
-Make training a separate step so we don't have to repeat it to add a scoring metric.
+--
 
-----
+![](output/bulldozer_graph_predicted_vs_actual.png)
 
-Interactively adjust scoring script
+--
 
-```r
-...
-if (interactive) ...
-...
+In `fit.R`, replace this:
+
+```stylus
+.
+.
+.
+
+train       <- read_csv(args[1])
+test        <- read_csv(args[2])
+output_file <- args[3]
+
+.
+.
+.
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
+
+.
+.
+.
 ```
 
-(Add more metrics. Output is a chart.)
+--
 
-- refactor if(interactive) to: get_args_else
-	+ assign default args for interactive use
-	+ get args from make
-	+ print args from make in copy/pastable form (for debugging)
+... with:
 
-----
+```stylus
+.
+.
+.
 
-conttest for automatic rebuilds
+train       <- read_csv(args[1])
+test        <- read_csv(args[2])
+model_name  <- args[3]
+output_file <- ensure_parent_directory_exists(args[4])
 
-As soon as a change is made, rebuild.
+model <- source_eval("src/models.R", models[[model_name]])
+
+.
+.
+.
+
+# fit model
+feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
+fitted <- model$fit(train, "SalePrice", feature_names)
+  
+# make predictions
+test$Predicted <- model$predict(fitted, test)
+
+
+.
+.
+.
+
+```
+	
+--
+
+```makefile
+MODELS := rf lm
+
+define make-model-targets
+
+working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+	Rscript $$^ $$@
+
+working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $$^ $(MODEL) $$@
+
+actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
+
+endef
+
+$(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
+```
+
+![](output/bulldozer_graph_predicted_vs_actual.png)
+
+--
+
+(Demonstrate parallel make)
+
+
+--
+
+Random Forest actual vs. predicted:
+
+<img src="working/models/rf/predicted_vs_actual.png" height="600">
+
+--
+
+Linear Model actual vs. predicted:
+
+<img src="working/models/lm/predicted_vs_actual.png" height="600">
+
+--
+<img src="output/model_performance.png" height="600">
+	
+--
+
+![](output/bulldozer_graph_model_performance.png)
+
+--
+
+
+```makefile
+MODELS := rf lm
+
+define make-model-targets
+
+working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+	Rscript $$^ $$@
+
+working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+	Rscript $$^ $(MODEL) $$@
+
+working/models/model_performance.png: working/models/$(MODEL)/test_predictions.csv
+
+actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
+
+endef
+
+$(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
+
+working/models/model_performance.png: scripts/model_performance.R
+	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
+```
+
+--
 
 ```bash
-conttest 'make report.html' .
+Rscript \
+	scripts/model_performance.R \
+	"working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" \
+	working/models/model_performance.png
 ```
 
-(Build `report.html` every time there is a change in the current directory)
+--
 
+In R:
 
-----
+```stylus
+> args
+[1] "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" 
+[2] "working/models/model_performance.png"
 
-Loop over feature sets, models
-
-----
-
-Make parallelism
-
-(show off our loop)
-
-Advantages of doing the parallelism here:
-
-- OS takes care of scheduling
-- No need to learn anything about how to put parallelism in your code
-- Easier debugging
+> prediction_paths <- pipeline_input_file_vector(args[1])
+> prediction_paths
+[1] "working/models/rf/test_predictions.csv" 
+[2] "working/models/lm/test_predictions.csv"
+```
 
 ----
 
-Partial Plots
+Visualization
 
-- Want to do other things with the fitted model
-	- predictions on new test sit
-	- visualizations
-
-(Start work interactively)
-
-----
-
-## [For output directories, use ".sentinel" files]?
+--
 
 ```makefile
-mydir/.sentinel: (dependencies)
-	recipe
+residuals-app:
+	Rscript launch_app.R residuals "$^"
 ```
 
-Need to update timestamp of `mydir/.sentinel` at the end of every script:
+(demo)
 
-```r
-touch_sentinel(mydir)
-```
-
-Could do this in recipe instead:
-
-...
-
-But doing it in the script has less duplication of code if we use the same script in multiple places.
+1. we started out making lots of output charts
+2. slow to open the right ones, compare, etc.
+3. YearMade
+4. ProductSize
 
 ----
 
-Reusing make code - Plugging in pieces to the dependency graph
+## Combatting Brittleness
 
-Uncouple both your scripts and makefile code from the particular application at hand.
+--
 
-in the makefile that gets included:
+Pipeline argument helper functions
 
-assert that `$(TRAIN_CSV)` variable is defined
+--
 
-`include`
+Assertions in scripts
 
-----
+--
 
+CI server
 
-## Input type assertions
+--
 
-In the Rscript:
+Hipchat w/ CI server
 
-```r
-args = get_command_args()
-#input_file = args[1]
-input_file = input_file(args[1])
-num_splits = input_integer(args[2])
-```
-
-----
-
-## Assertions about results
-
-(incorporating checks that automatically run after each step)
-
-Replace 
-
-```makefile
-RSCRIPT = Rscript
-```
-
-with 
-
-```makefile
-RSCRIPT = (Ben's thing)
-```
-
-----
-
-CI server: notifications that it broke 
-
-----
-
-CI server for sharing results 
 
 
 ----
 
-## (Not part of presentation, this is just for my own reference)
+--
 
+## References
 
-should I discuss checking results into github (for easy side-by-side comparison)? 
+- Conda for reproducible environments: http://continuum.io/blog/conda-data-science
+- Talk on how reproducibility saves you time: https://www.youtube.com/watch?v=7B3n-5atLxM
 
-https://team.kaggle.com/wiki/R
-https://team.kaggle.com/wiki/Makefile.CodingStyle
