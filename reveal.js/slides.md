@@ -435,7 +435,7 @@ Loop over models
 
 --
 
-![](output/bulldozer_graph_predicted_vs_actual.png)
+![](output/bulldozer_graph_actual_vs_predicted.png)
 
 --
 
@@ -517,7 +517,7 @@ endef
 $(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
 ```
 
-![](output/bulldozer_graph_predicted_vs_actual.png)
+![](output/bulldozer_graph_actual_vs_predicted.png)
 
 --
 
