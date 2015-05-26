@@ -18,8 +18,8 @@ stop("Not ready to run!")
 #   ggtitle("Actual vs. Predicted Sale Price") +
 #   xlab("Actual Sale Price ($)") +
 #   ylab("Predicted Sale Price ($)") +
-#   scale_y_continuous(labels = comma, limits=range(test$SalePrice)) +
-#   scale_x_continuous(labels = comma, limits=range(test$SalePrice)) +
+#   scale_y_continuous(labels = comma, limits=range(predictions$SalePrice)) +
+#   scale_x_continuous(labels = comma, limits=range(predictions$SalePrice)) +
 #   coord_fixed()
 # 
 # ggsave(filename = output_file, plot = actual_predicted_plot)
