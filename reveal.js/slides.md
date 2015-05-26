@@ -53,11 +53,15 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 
 ----
 
-## Kaggle
+<img src="images/leaderboard.png" height="600px" style="background-color:white;" />
 
-Note: 
+--
 
-Also did consulting
+<img src="http://i.huffpost.com/gen/1280925/images/o-FRACKING-facebook.jpg" height="600px" style="background-color:white;" />
+
+
+
+
 
 --
 
@@ -115,6 +119,14 @@ Note:
 
 My first job. Large insurance company.
 
+- basis for much analysis the rest of the year
+- when I arrived one of my first jobs was building this data set for homeowners insurance
+- a bunch of scripts that are run by hand
+- each may take hours to run
+- restart in the right place when it fails at night
+- my boss told me "save the logs" - but assuming I do save the logs, we've got some runs that succeeded and some that failed and if you're ever trying to diagnose something you're relying on me to accurately match up the logs
+
+
 --
 
 Old code doesn't work anymore
@@ -126,6 +138,8 @@ Where did these results come from?
 --
 
 Might not bother asking for details
+
+Note:
 
 - Do you bother asking for details? (Will that be taken as doubt/criticism?)
 
@@ -367,6 +381,12 @@ make working/predicted_vs_actual.png
 <div style="margin-left: 420px;">
 	<img src="output/bulldozer_graph_2_no_loop.png" class="fragment">
 </div>
+
+Note:
+
+- want to tweak chart w/o rerunning the model
+- separate into two steps
+
 
 --
 
