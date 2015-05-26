@@ -402,11 +402,31 @@ working/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
 Note:
 
 - `git checkout two-make-steps-1`
-- Create make step
+- Create make step:
+
+working/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/test_predictions.csv
+	Rscript $^ $@ 
+
 - Open scoring script
 - How do we run w/ the arguments? Execute make in command line w/ argument-printing
 - Tweak interactively
 - Run as make step
+
+mae_string <- comma_format(digits=0)(mae$Evaluate(predictions$SalePrice, predictions$Predicted))
+
+actual_predicted_plot <- 
+  ggplot(predictions) + 
+  geom_point(aes(x=SalePrice, y=Predicted), alpha=.01) +
+  ggtitle(sprintf("Actual vs. Predicted Sale Price\nMAE: $%s", mae_string)) +
+  xlab("Actual Sale Price ($)") +
+  ylab("Predicted Sale Price ($)") +
+  scale_y_continuous(labels = comma, limits=range(predictions$SalePrice)) +
+  scale_x_continuous(labels = comma, limits=range(predictions$SalePrice)) +
+  coord_fixed()
+
+ggsave(filename = output_plot, plot = actual_predicted_plot)
+ 
+
 - (maybe demonstrate conttest?)
 
 ----
