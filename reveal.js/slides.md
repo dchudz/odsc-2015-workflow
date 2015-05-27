@@ -88,47 +88,6 @@ Mostly will talk about how we appproached automating the pipeline, but first I w
 
 --
 
-<img src="images/rr_paper.png" height="100px" style="background-color:white;" />
-
-<img src="https://aaronrourke.files.wordpress.com/2014/01/debt-to-income.jpg" height="200px" style="background-color:white;" />
-
-
---
-
-> A well-known study completed by economists Ken Rogoff and Carmen Reinhart confirms this common-sense conclusion. 
-
-> <cite>2013 Republican Budget Proposal</cite>
-
-<img src="https://s3.amazonaws.com/s3.documentcloud.org/documents/408616/pages/republican-2013-budget-proposal-p1-normal.gif" height = "300px"/>
-
-
-
---
-
-![](http://www.washingtonpost.com/blogs/wonkblog/files/2013/04/reinhart_rogoff_coding_error_0.png)
-
---
-
-![](http://www.toonpool.com/user/57241/files/reinhart_rogoff_apologetic_comic_1990409.jpg)
-
---
-
-Building analysis dataset (every year) was slow and brittle.
-
-Note:
-
-My first job. Large insurance company.
-
-- basis for much analysis the rest of the year
-- when I arrived one of my first jobs was building this data set for homeowners insurance
-- a bunch of scripts that are run by hand
-- each may take hours to run
-- restart in the right place when it fails at night
-- my boss told me "save the logs" - but assuming I do save the logs, we've got some runs that succeeded and some that failed and if you're ever trying to diagnose something you're relying on me to accurately match up the logs
-
-
---
-
 Old code doesn't work anymore
 
 --
@@ -187,18 +146,16 @@ Visualize output conveniently
 ## Single Script?
 
 <div style="width: 100%; overflow: hidden;">
-    <div style="width: 400px; float: left;">
-<pre class="fragment"><code data-trim>
+	<div style="width: 400px; float: left;">
+		<pre class="fragment"><code data-trim>
 do_step1()
 do_step2()
 do_step3()
 do_step4()
 do_step5()
 do_step6()
-do_step7()
-do_step8()
-</code></pre>
-    </div>
+		</code></pre>
+	</div>
     <div style="margin-left: 420px;">
     	<ul style="list-style: none;">
 			<li class="fragment">&#x2713; Explicit</li>
@@ -206,15 +163,42 @@ do_step8()
 			<li class="fragment">&#x2717; Build only what we ask for</li>
 			<li class="fragment">&#x2717; Rebuild only when needed</li>
 			<li class="fragment">&#x2754; Allow working interactively</li>
-			<li class="fragment">&#x2754; Visualize output conveniently</li>
+			<li class="fragment">&#x2754; Visualize output easily</li>
 		</ul>
-    </div>
-</div>
+	</div>
 
+</div>
 
 --
 
-![](http://www.mr-edd.co.uk/static/blog/problem_dag_driven_builds/staticlib.png)
+
+## Make
+
+<div style="width: 100%; overflow: hidden;">
+	<div style="width: 400px; float: left;">
+	<img src="http://www.mr-edd.co.uk/static/blog/problem_dag_driven_builds/staticlib.png" height="400">
+	</div>
+    <div style="margin-left: 420px;">
+    	<ul style="list-style: none;">
+			<li class="fragment">&#x2713; Explicit</li>
+			<li class="fragment">&#x2713; Automated</li>
+			<li class="fragment">&#x2713; Build only what we ask for</li>
+			<li class="fragment">&#x2713; Rebuild only when needed</li>
+			<li class="fragment">&#x2713; Allow working interactively
+				<ul><ul>
+					<li>(with tricks I'll show)</li>
+				</ul></ul>
+			</li>
+			<li class="fragment">&#x2713; Visualize output easily
+				<ul><ul>
+					<li>(with Shiny)</li>
+				</ul></ul>
+</li>
+		</ul>
+	</div>
+
+</div>
+
 
 Note:
 
