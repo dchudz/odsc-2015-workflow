@@ -186,6 +186,8 @@ Visualize output conveniently
 
 ## Single Script?
 
+<div style="width: 100%; overflow: hidden;">
+    <div style="width: 400px; float: left;">
 <pre class="fragment"><code data-trim>
 do_step1()
 do_step2()
@@ -193,8 +195,11 @@ do_step3()
 do_step4()
 do_step5()
 do_step6()
+do_step7()
+do_step8()
 </code></pre>
     </div>
+    <div style="margin-left: 420px;">
     	<ul style="list-style: none;">
 			<li class="fragment">&#x2713; Explicit</li>
 			<li class="fragment">&#x2713; Automated</li>
@@ -203,6 +208,7 @@ do_step6()
 			<li class="fragment">&#x2754; Allow working interactively</li>
 			<li class="fragment">&#x2754; Visualize output conveniently</li>
 		</ul>
+    </div>
 </div>
 
 
