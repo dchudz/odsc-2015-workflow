@@ -65,7 +65,7 @@ Note:
 
 - as often happens, quickly had complicated set of steps
 - with
-	- a number of different pre-processing steps
+	- pre-processing
 	- several models
 	- many different feature sets we tried
 	- lots of different kinds of outputs
@@ -84,7 +84,7 @@ Note:
 - mainly we just ran code, 
 - told each other about it, 
 - shared output in dropbox
-- ask my colleague: are the corrected geological interpolations ready for me to feed into model?
+- my colleage would ask me: are the corrected geological interpolations ready for me to feed into model?
 - "yep they're in dropbox at customer5/geology/v6"
 - "and the code is in the master branch on github?"
 - no hold on let me push...
@@ -133,6 +133,8 @@ Note:
 
 Where did these results come from?
 
+Note:
+
 - Might be at a presentation
 - Or looking at a report someone sends you
 - Or even your own work
@@ -144,8 +146,7 @@ Might not bother asking for details
 
 Note:
 
-- Let's say you've done some work and how it's all put together is just in your head
-- Someone could ask you for details about your work
+- it is possible could ask you for details about your work
 - And you might remember how it's all put together
 - But even then, that might just be the small amount of friction that prevents them from 
 	+ improving it
@@ -159,7 +160,8 @@ Iterating is slow if executing downstream steps is tedious
 Note:
 
 - finally (but I think most importantly):
-	+ if we change some upstream step (like improving some pre-processing), it's a big pain of the downstream steps (like model building and evaluation) then need to be run manually
+	+ let's say we change a data pre-processing step upstream
+	+ we don't want it to be a pain to update model-building and everything else downstream
 
 ----
 
@@ -182,9 +184,17 @@ Automated
 
 Build only what we ask for
 
+Note:
+
+- mainly important for larger projects
+
 --
 
 Rebuild only when needed
+
+Note:
+
+- mainly important for larger projects
 
 --
 
