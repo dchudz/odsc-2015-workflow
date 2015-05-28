@@ -61,6 +61,14 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 
 
 
+Note:
+
+- as often happens, quickly had complicated set of steps
+- with
+	- a number of different pre-processing steps
+	- several models
+	- many different feature sets we tried
+	- lots of different kinds of outputs
 
 
 --
@@ -69,11 +77,32 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 
 <img src="http://www.clipartbest.com/cliparts/9TR/Rzy/9TRRzy88c.png" height="200px" style="background-color:white;" />
 
+Note: 
+
+- at first very informal
+- working with a couple colleagues
+- mainly we just ran code, 
+- told each other about it, 
+- shared output in dropbox
+- ask my colleague: are the corrected geological interpolations ready for me to feed into model?
+- "yep they're in dropbox at customer5/geology/v6"
+- "and the code is in the master branch on github?"
+- no hold on let me push...
+- most of all: "which of your scripts comes first? which input data do I need?"
+- not ideal for us...
+
 --
 
 ## Difficult to join project
 
 ![](http://au.reachout.com/-/media/images/articles%202/computer%20guy.jpg)
+
+Note:
+
+- ... but it was even more difficult when new people came to join the project
+- they didn't have any context around what steps get executed in what order
+- they were mainly software engineers learning data science
+- as we worked together, we figured out a good system for...
 
 --
 
@@ -84,15 +113,30 @@ This talk will demonstrate the workflow and tools we used to increase our produc
 
 Note:
 
-Mostly will talk about how we appproached automating the pipeline, but first I want to talk about some of the other problems this approach addresses. Reproducibility...
+- ... automating the pipeline
+- Mostly will talk about our approach to that
+- briefly want to first:
+	- describe what goes wrong without a good pipeline workflow
+	- describe what I think are the properties a good workflow should satisfy
 
 --
 
 Old code doesn't work anymore
 
+Note:
+
+- pipeline not automated ==> 
+- not run frequently ==> 
+- easy to break with no one knowing
+
 --
 
 Where did these results come from?
+
+- Might be at a presentation
+- Or looking at a report someone sends you
+- Or even your own work
+- ... and have a hard time figuring out where the results came from
 
 --
 
@@ -100,13 +144,22 @@ Might not bother asking for details
 
 Note:
 
-- Do you bother asking for details? (Will that be taken as doubt/criticism?)
-
-- More likely to look into details (to build on or improve) if they're already open.
+- Let's say you've done some work and how it's all put together is just in your head
+- Someone could ask you for details about your work
+- And you might remember how it's all put together
+- But even then, that might just be the small amount of friction that prevents them from 
+	+ improving it
+	+ building from it
+	+ learning from it
 
 --
 
 Iterating is slow if executing downstream steps is tedious
+
+Note:
+
+- finally (but I think most importantly):
+	+ if we change some upstream step (like improving some pre-processing), it's a big pain of the downstream steps (like model building and evaluation) then need to be run manually
 
 ----
 
