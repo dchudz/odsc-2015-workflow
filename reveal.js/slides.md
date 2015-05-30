@@ -209,8 +209,8 @@ Visualize output conveniently
 ## Single Script?
 
 <div style="width: 100%; overflow: hidden;">
-	<div style="width: 400px; float: left;">
-		<pre class="fragment"><code data-trim>
+	<div style="width: 300px; float: left;">
+		<pre class="fragment" width="10%"><code data-trim>
 do_step1()
 do_step2()
 do_step3()
@@ -293,6 +293,13 @@ make final_output
 ```
 
 ![](output/whats_make.png)
+
+`final_output`:
+
+```text
+We made an intermediate output
+...and then we made the final output.
+```
 
 ----
 
@@ -553,10 +560,12 @@ MODELS := rf lm
 
 define make-model-targets
 
-working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+working/models/$(MODEL)/predicted_vs_actual.png: \
+	scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
 	Rscript $$^ $$@
 
-working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+working/models/$(MODEL)/test_predictions.csv: \
+	scripts/model.R input/train.csv input/test.csv
 	Rscript $$^ $(MODEL) $$@
 
 actual-vs-predicted: working/models/$(MODEL)/predicted_vs_actual.png
@@ -570,8 +579,19 @@ $(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
 
 --
 
-(Demonstrate parallel make)
+Build in series:
 
+```bash
+make actual-vs-predicted
+```
+
+Build in parallel:
+
+```bash
+make -j4 actual-vs-predicted
+```
+
+(`4` is the number of jobs run at once)
 
 --
 
@@ -592,7 +612,35 @@ Linear Model actual vs. predicted:
 
 ![](output/bulldozer_graph_model_performance.png)
 
+
 --
+
+In R:
+
+```stylus
+> args <- command_args()
+> args
+[1] "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" 
+[2] "working/models/model_performance.png"
+
+> prediction_paths <- pipeline_input_file_vector(args[1])
+> prediction_paths
+[1] "working/models/rf/test_predictions.csv" 
+[2] "working/models/lm/test_predictions.csv"
+```
+
+--
+
+```bash
+Rscript \
+	scripts/model_performance.R \
+	"working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" \
+	working/models/model_performance.png
+```
+
+--
+
+
 
 
 ```makefile
@@ -600,10 +648,12 @@ MODELS := rf lm
 
 define make-model-targets
 
-working/models/$(MODEL)/predicted_vs_actual.png: scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
+working/models/$(MODEL)/predicted_vs_actual.png: \
+	scripts/plot_predicted_vs_actual.R working/models/$(MODEL)/test_predictions.csv
 	Rscript $$^ $$@
 
-working/models/$(MODEL)/test_predictions.csv: scripts/model.R input/train.csv input/test.csv
+working/models/$(MODEL)/test_predictions.csv: \
+	scripts/model.R input/train.csv input/test.csv
 	Rscript $$^ $(MODEL) $$@
 
 working/models/model_performance.png: working/models/$(MODEL)/test_predictions.csv
@@ -618,29 +668,7 @@ working/models/model_performance.png: scripts/model_performance.R
 	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
 ```
 
---
 
-```bash
-Rscript \
-	scripts/model_performance.R \
-	"working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" \
-	working/models/model_performance.png
-```
-
---
-
-In R:
-
-```stylus
-> args
-[1] "working/models/rf/test_predictions.csv working/models/lm/test_predictions.csv" 
-[2] "working/models/model_performance.png"
-
-> prediction_paths <- pipeline_input_file_vector(args[1])
-> prediction_paths
-[1] "working/models/rf/test_predictions.csv" 
-[2] "working/models/lm/test_predictions.csv"
-```
 
 ----
 
