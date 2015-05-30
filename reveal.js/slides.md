@@ -349,7 +349,7 @@ ggplot(test) +
 
 ### Directories:
 
-<ul style="list-style: none;">
+<ul>
 	<li class="fragment">input (maybe git-ignored)</li>
 	<li class="fragment">working (git-ignored)</li>
 	<li class="fragment">scripts</li>
