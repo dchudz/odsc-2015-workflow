@@ -265,6 +265,8 @@ do_step6()
 
 Note:
 
+The problem of looking at what depends on what and building only what we need to is one software engineers encountered in the process of going from source code to software they distribute.
+
 This is a problem software engineers have worked on!
 
 --
