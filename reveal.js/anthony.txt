@@ -1,7 +1,3 @@
-before & after live demo pause
-
-pred vs actual as first slide after "EXample ..."
-
 right before creating a make step -- go over folder structure
 
 --

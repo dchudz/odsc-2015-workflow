@@ -23,6 +23,7 @@ Note:
 - (had the opportunity to interdisciplinary team w/ soft eng and ds) 
 - one of the biggest eye-openers for me over the last few years
 - happy to take questions throughout the talk
+	+ (remember to pause before & after live demo)
 
 ----
 
@@ -346,12 +347,15 @@ ggplot(test) +
 
 --
 
-Makefile:
+### Directories:
 
-```makefile
-working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
-	Rscript scripts/model.R input/train.csv input/test.csv working/predicted_vs_actual.png
-```
+<ul style="list-style: none;">
+	<li class="fragment">input (maybe git-ignored)</li>
+	<li class="fragment">working (git-ignored)</li>
+	<li class="fragment">scripts</li>
+	<li class="fragment">src</li>
+</ul>
+
 
 --
 
@@ -359,8 +363,16 @@ Makefile:
 
 ```makefile
 working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
-	Rscript $^ $@
+	Rscript scripts/model.R input/train.csv input/test.csv working/predicted_vs_actual.png
 ```
+
+<div class="fragment">
+	<p>Equivalent:</p>
+<pre width="10%"><code data-trim class="makefile">
+working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
+	Rscript $^ $@
+</code></pre>
+	</div>
 
 --
 
@@ -387,6 +399,7 @@ output_file <- args[3]
 
 ggsave(filename = output_file, plot = actual_predicted_plot)
 ```
+--
 
 Shell:
 
@@ -394,7 +407,13 @@ Shell:
 make working/predicted_vs_actual.png
 ```
 
---
+Runs:
+
+```
+Rscript scripts/model.R input/train.csv input/test.csv working/predicted_vs_actual.png
+```
+
+
 ![](output/bulldozer_graph_1.png)
 
 <img src="output/predicted_vs_actual.png" height="400">
