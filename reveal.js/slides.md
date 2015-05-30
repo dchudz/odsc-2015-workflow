@@ -1,34 +1,3 @@
-Outline
-
-0. I'm going to tell you:
-	- (quickly) why it's a problem that data scientists often aren't automating their analysis pipelines
-	- show one approach to automating pipelines 
-1. the problem
-2. What experience am I drawing on? (briefly describe the team Kaggle had working on oil & gas)
-3. Broad overview of what makes a good process
-4. What's make?
-5. Use example to demonstrate key ideas:
-	- Getting started with a makefile
-		- initial script fits a model and evaluates it on test set
-	- Motivation for breaking into 2 steps: Want to adjust scoring metric w/o 
-	- Break train/test into 2 steps
-	- Add more metrics to test script (starting interactively)
-		+ test script producers a chart showing metrics for each model
-	- Loop over models (show off parallel execution)
-	- Add step for partial plots (starting interactively)
-	- Show how to reuse partial plot makefile code
-	- Navigating so many results is hard - using Shiny app
-6. Combatting brittleness by surfacing errors: 
-	- Helper functions to make assertions about input types
-	- Assertions about expected results
-	- CI server
-	- use of hipchat w/ CI server
-
-
-----
-
-
-
 <h2>
 	Data Workflows for:
 	<ul style="list-style: none;">
@@ -37,6 +6,9 @@ Outline
 		<li>Reproducibility</li>
 	</ul>
 </h2>
+<p>
+(Open Data Science Conference)
+<p>
 <p>
 	<small>
 		<a href="http://davidchudzicki.com.com">David Chudzicki (Kaggle)</a>
@@ -47,17 +19,18 @@ Outline
 
 Note:
 
-For other data scientists to improve, build on, or even just trust your analysis, they need to be able to reproduce it. Even if you have shared code and data, reproducing your analysis may be difficult: which code was executed against which data in what order? And even if the steps are clear, rerunning downstream steps to see your new results after changes upstream can be a tedious process.
-
-This talk will demonstrate the workflow and tools we used to increase our productivity and enjoyment by reducing grunt work and making it easier to build on each other's work. We used GNU Make as a clear way to represent what each step does, the inputs it depends on, and the output it produces. As we iterate on our analysis, makefiles allow us to conveniently execute only the steps that depend on code or other inputs that have changed since the last run. I'll walk through an example of creating a project, adding each step as a modular script, and reusing these scripts in different contexts. Since interactive exploration (and debugging) is a big part of data science, I'll demonstrate techniques for conveniently going back and forth between batch execution via makefiles and working interactively. 
+- data scientist w/ math stat background...
+- (had the opportunity to interdisciplinary team w/ soft eng and ds) 
+- one of the biggest eye-openers for me over the last few years
+- happy to take questions throughout the talk
 
 ----
 
-<img src="images/leaderboard.png" height="600px" style="background-color:white;" />
+<img src="images/leaderboard.png" height="800px" style="background-color:white;" />
 
 --
 
-<img src="http://i.huffpost.com/gen/1280925/images/o-FRACKING-facebook.jpg" height="600px" style="background-color:white;" />
+<img src="http://i.huffpost.com/gen/1280925/images/o-FRACKING-facebook.jpg" height="800px" style="background-color:white;" />
 
 
 
@@ -225,8 +198,6 @@ do_step6()
 			<li class="fragment">&#x2713; Automated</li>
 			<li class="fragment">&#x2717; Build only what we ask for</li>
 			<li class="fragment">&#x2717; Rebuild only when needed</li>
-			<li class="fragment">&#x2754; Allow working interactively</li>
-			<li class="fragment">&#x2754; Visualize output easily</li>
 		</ul>
 	</div>
 
@@ -309,6 +280,10 @@ We made an intermediate output
 
 --
 
+<img src="output/predicted_vs_actual.png" height="800">
+
+--
+
 ```stylus
 # read data
 train <- read_csv("working/train_test_split/train.csv")
@@ -371,14 +346,11 @@ ggplot(test) +
 
 --
 
-<img src="output/predicted_vs_actual.png" height="400">
---
-
 Makefile:
 
 ```makefile
 working/predicted_vs_actual.png: scripts/model.R input/train.csv input/test.csv
-	Rscript scripts/model.R input/train.csv input/test.csv
+	Rscript scripts/model.R input/train.csv input/test.csv working/predicted_vs_actual.png
 ```
 
 --
@@ -423,7 +395,6 @@ make working/predicted_vs_actual.png
 ```
 
 --
-
 ![](output/bulldozer_graph_1.png)
 
 <img src="output/predicted_vs_actual.png" height="400">
@@ -431,7 +402,7 @@ make working/predicted_vs_actual.png
 --
 
 
-<div style="width: 400px; float: left;">
+<div style="width: 800px; float: left;">
 	<img src="output/bulldozer_graph_1.png">
 </div>
 <div style="margin-left: 420px;">
@@ -491,11 +462,11 @@ Loop over models
 
 --
 
-![](output/bulldozer_graph_actual_vs_predicted.png)
+<img src="output/bulldozer_graph_actual_vs_predicted.png" height="700">
 
 --
 
-In `fit.R`, replace this:
+In `model.R`, replace this:
 
 ```stylus
 .
@@ -527,26 +498,21 @@ rf <- randomForest(train[feature_names], train$SalePrice, ntree=10)
 .
 .
 .
-
 train       <- read_csv(args[1])
 test        <- read_csv(args[2])
 model_name  <- args[3]
 output_file <- ensure_parent_directory_exists(args[4])
 
 model <- source_eval("src/models.R", models[[model_name]])
-
 .
 .
 .
-
 # fit model
 feature_names <- c("saledate", "YearMade", "HorsePower", "ProductGroupDesc")
 fitted <- model$fit(train, "SalePrice", feature_names)
   
 # make predictions
 test$Predicted <- model$predict(fitted, test)
-
-
 .
 .
 .
@@ -575,7 +541,6 @@ endef
 $(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
 ```
 
-![](output/bulldozer_graph_actual_vs_predicted.png)
 
 --
 
@@ -591,27 +556,24 @@ Build in parallel:
 make -j4 actual-vs-predicted
 ```
 
-(`4` is the number of jobs run at once)
-
 --
 
 Random Forest actual vs. predicted:
 
-<img src="working/models/rf/predicted_vs_actual.png" height="600">
+<img src="working/models/rf/predicted_vs_actual.png" height="800">
 
 --
 
 Linear Model actual vs. predicted:
 
-<img src="working/models/lm/predicted_vs_actual.png" height="600">
+<img src="working/models/lm/predicted_vs_actual.png" height="800">
 
 --
-<img src="output/model_performance.png" height="600">
+<img src="output/model_performance.png" height="800">
 	
 --
 
-![](output/bulldozer_graph_model_performance.png)
-
+<img src="output/bulldozer_graph_model_performance.png" height="600">
 
 --
 
@@ -694,28 +656,15 @@ residuals-app:
 
 --
 
-Pipeline argument helper functions
+Automatically run pipeline when I push to Github
 
 --
 
-Assertions in scripts
+Notifications in team chat room
 
---
-
-CI server
-
---
-
-Hipchat w/ CI server
-
+<img src="images/chat.png" height="300px">
 
 
 ----
 
---
-
-## References
-
-- Conda for reproducible environments: http://continuum.io/blog/conda-data-science
-- Talk on how reproducibility saves you time: https://www.youtube.com/watch?v=7B3n-5atLxM
-
+## Slides & Example

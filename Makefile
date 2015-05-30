@@ -20,6 +20,7 @@ $(foreach MODEL,$(MODELS),$(eval $(call make-model-targets,$MODEL)))
 
 working/models/model_performance.png: scripts/model_performance.R
 	Rscript $(firstword $^) "$(wordlist 2, $(words $^), $^)" $@
+	open $@
 
 all: working/models/model_performance.png actual-vs-predicted
 

@@ -1,0 +1,20 @@
+before & after live demo pause
+
+pred vs actual as first slide after "EXample ..."
+
+right before creating a make step -- go over folder structure
+
+--
+
+somehow make clearer the steps that happen here:
+
+Shell:
+
+make working/predicted_vs_actual.png
+
+---
+
+signpost the demo--
+
+1. tricks for working interactively
+2. show making the change to the chart w/o 

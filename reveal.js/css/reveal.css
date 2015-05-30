@@ -1,3 +1,10 @@
+.reveal .footer {
+  position: absolute;
+  bottom: 1em;
+  left: 1em;
+  font-size: 0.5em;
+}
+
 /*!
  * reveal.js
  * http://lab.hakim.se/reveal-js
@@ -286,7 +293,7 @@ body {
   right: 0;
   bottom: 0;
   left: 0;
-  margin: auto;
+  margin: 30px;
   overflow: visible;
   z-index: 1;
   text-align: center;
