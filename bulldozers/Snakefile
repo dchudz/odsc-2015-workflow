@@ -14,10 +14,12 @@
 MODELS = ['rf', 'lm']
 INPUT_FILES = ['input/Train.csv', 'input/Machine_Appendix.csv']
 
+_model_predictions = expand('working/models/{model}/test_predictions.csv', model=MODELS)
+
 rule all: 
     input: 
         'working/models/model_performance.png', 
-        csv=expand('working/models/{model}/test_predictions.csv', model=MODELS),
+        csv=_model_predictions,
         actual_vs_predicted=expand('working/models/{model}/predicted_vs_actual.png', model=MODELS)
     shell: 
         'Rscript launch_app.R residuals "{input.csv}"'
@@ -49,7 +51,7 @@ rule test_predictions:
 
 rule model_performance:
     input: 
-        csv=expand('working/models/{model}/test_predictions.csv', model=MODELS),
+        csv=_model_predictions,
         script='scripts/model_performance.R'
     output: 'working/models/model_performance.png'
     shell: 'Rscript {input.script} {input.csv} {output}'
