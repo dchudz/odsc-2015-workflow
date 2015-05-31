@@ -13,12 +13,15 @@ args <- command_args_unless_interactive(c("input/train.csv", "input/test.csv", "
 print("args is:")
 print(args)
 
-train <- read_csv(args[1])
-test <- read_csv(args[2])
+train_path <- pipeline_input_file(args[1])
+test_path <- pipeline_input_file(args[2])
 model_name <- args[3]
 output_file <- ensure_parent_directory_exists(args[4])
 
 model <- source_eval("src/models.R", models[[model_name]])
+
+train <- read_csv(train_path)
+test <- read_csv(test_path)
 
 # process features
 train <- process_features(train)
