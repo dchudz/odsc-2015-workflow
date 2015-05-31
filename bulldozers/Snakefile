@@ -1,0 +1,70 @@
+# 
+# Snakefile
+# 
+# run "pip3 install snakemake" with python3 installed
+# 
+# then execute: 
+# snakemake
+# 
+# All of these rules use `shell:` since they are relatively simple, 
+# but it is possible to use `run:` instead and execute arbitrary 
+# python code within the rule. It is also possible to execute 
+# arbitrary python outside of declared rules, i.e. the MODELS variable.
+
+MODELS = ['rf', 'lm']
+
+rule all: 
+    input: 
+        'working/models/model_performance.png', 
+        csv=expand('working/models/{model}/test_predictions.csv', model=MODELS),
+        actual_vs_predicted=expand('working/models/{model}/predicted_vs_actual.png', model=MODELS)
+    shell: 
+        'Rscript launch_app.R residuals "{input.csv}"'
+
+rule clean_input:
+    input: 
+        csv=['input/Train.csv', 'input/Machine_Appendix.csv'],
+        script='scripts/clean.R'
+    output: 'working/cleaned_input.csv'
+    shell: 'Rscript {input.script} {output} {input.csv}'
+
+rule predicted_vs_actual:
+    input: 
+        script='scripts/plot_predicted_vs_actual.R',
+        test_predictions='working/models/{model}/test_predictions.csv'
+    output: 'working/models/{model}/predicted_vs_actual.png'
+    shell:
+        'Rscript {input} {output}'
+
+rule test_predictions:
+    input:
+        script='scripts/model.R',
+        train='working/split/train.csv',
+        test='working/split/test.csv'
+    output: 'working/models/{model}/test_predictions.csv'
+    shell: 
+        'Rscript {input.script} {input.train} {input.test} {wildcards.model} {output}'
+
+
+rule model_performance:
+    input: 
+        csv=expand('working/models/{model}/test_predictions.csv', model=MODELS),
+        script='scripts/model_performance.R'
+    output: 'working/models/model_performance.png'
+    shell: 'Rscript {input.script} {input.csv} {output}'
+
+
+# Snakemake deals with multiple file targets, so we don't need to use a hack =)
+rule split:
+    input:
+        script='scripts/train_test_split.R',
+        csv='working/cleaned_input.csv'
+    output: 
+        train='working/split/train.csv', 
+        test='working/split/test.csv'
+    shell:
+        'Rscript {input.script} {output.train} {input.csv}' 
+    # here, we we could also give the output directory directly to the Rscript by doing something like
+    # run:
+    #     outdir = dirname(output[0])
+    #     shell('Rscript {input.script} {outdir} {input.csv')
