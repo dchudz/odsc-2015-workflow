@@ -12,6 +12,7 @@
 # arbitrary python outside of declared rules, i.e. the MODELS variable.
 
 MODELS = ['rf', 'lm']
+INPUT_FILES = ['input/Train.csv', 'input/Machine_Appendix.csv']
 
 rule all: 
     input: 
@@ -23,7 +24,7 @@ rule all:
 
 rule clean_input:
     input: 
-        csv=['input/Train.csv', 'input/Machine_Appendix.csv'],
+        csv=INPUT_FILES,
         script='scripts/clean.R'
     output: 'working/cleaned_input.csv'
     shell: 'Rscript {input.script} {output} {input.csv}'
