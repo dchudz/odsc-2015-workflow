@@ -2,10 +2,9 @@
 */working
 .DS_Store
 .svn
-*/log/*.log
-*/tmp/**
-*/node_modules/
-*/.sass-cache
-*/css/reveal.min.css
-*/js/reveal.min.js
-*/.Rproj.user
+presentation/log/*.log
+presentation/tmp/**
+presentation/node_modules/
+presentation/.sass-cache
+presentation/css/reveal.min.css
+presentation/js/reveal.min.js
