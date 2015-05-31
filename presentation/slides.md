@@ -755,6 +755,20 @@ Notifications in team chat room
 
 <img src="images/chat.png" height="300px">
 
+----
+
+## More topics
+
+Make tricks
+
+- `make .VARIABLE_NAME`
+- `make print-VARIABLE_NAME`
+
+Depending on code can create hassles
+
+Other build tools
+
+
 
 ----
 
