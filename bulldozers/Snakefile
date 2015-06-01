@@ -23,12 +23,12 @@ rule all:
         'working/models/model_performance.png', 
         actual_vs_predicted=expand('working/models/{model}/predicted_vs_actual.png', model=MODELS)
 
-rule residuals_app: # doesn't work? 
+rule residuals_app: 
     input: 
         csv=_model_performance_csv,
         script='launch_app.R'
     output: temp('.phony') # no phony rules yet, but this works
-    shell: 'Rscript {input.script} {input.csv}'
+    shell: 'Rscript {input.script} residuals {input.csv}'
 
 
 rule predicted_vs_actual:
