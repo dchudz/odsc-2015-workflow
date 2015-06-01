@@ -11,25 +11,25 @@
 # python code within the rule. It is also possible to execute 
 # arbitrary python outside of declared rules, i.e. the MODELS variable.
 
+from os.path import dirname
+
 MODELS = ['rf', 'lm']
 INPUT_FILES = ['input/Train.csv', 'input/Machine_Appendix.csv']
 
-_model_predictions = expand('working/models/{model}/test_predictions.csv', model=MODELS)
+_model_performance_csv = expand('working/models/{model}/test_predictions.csv', model=MODELS)
 
 rule all: 
     input: 
         'working/models/model_performance.png', 
-        csv=_model_predictions,
         actual_vs_predicted=expand('working/models/{model}/predicted_vs_actual.png', model=MODELS)
-    shell: 
-        'Rscript launch_app.R residuals "{input.csv}"'
 
-rule clean_input:
+rule residuals_app: # doesn't work? 
     input: 
-        csv=INPUT_FILES,
-        script='scripts/clean.R'
-    output: 'working/cleaned_input.csv'
-    shell: 'Rscript {input.script} {output} {input.csv}'
+        csv=_model_performance_csv,
+        script='launch_app.R'
+    output: temp('.phony') # no phony rules yet, but this works
+    shell: 'Rscript {input.script} {input.csv}'
+
 
 rule predicted_vs_actual:
     input: 
@@ -37,7 +37,15 @@ rule predicted_vs_actual:
         test_predictions='working/models/{model}/test_predictions.csv'
     output: 'working/models/{model}/predicted_vs_actual.png'
     shell:
-        'Rscript {input} {output}'
+        'Rscript {input.script} {input.test_predictions} {output}'
+
+rule model_performance:
+    input: 
+        csv=_model_performance_csv,
+        script='scripts/model_performance.R'
+    output: 'working/models/model_performance.png'
+    shell: 'Rscript {input.script} "{input.csv}" {output}'
+
 
 rule test_predictions:
     input:
@@ -49,25 +57,22 @@ rule test_predictions:
         'Rscript {input.script} {input.train} {input.test} {wildcards.model} {output}'
 
 
-rule model_performance:
-    input: 
-        csv=_model_predictions,
-        script='scripts/model_performance.R'
-    output: 'working/models/model_performance.png'
-    shell: 'Rscript {input.script} {input.csv} {output}'
-
-
 # Snakemake deals with multiple file targets, so we don't need to use a hack =)
 rule split:
     input:
-        script='scripts/train_test_split.R',
-        csv='working/cleaned_input.csv'
+        csv='working/cleaned_input.csv',
+        script='scripts/train_test_split.R'
     output: 
         train='working/split/train.csv', 
         test='working/split/test.csv'
-    shell:
-        'Rscript {input.script} {output.train} {input.csv}' 
-    # here, we we could also give the output directory directly to the Rscript by doing something like
-    # run:
-    #     outdir = dirname(output[0])
-    #     shell('Rscript {input.script} {outdir} {input.csv')
+    run: 
+        outdir = dirname(output.train)
+        shell('Rscript {input.script} {outdir} {input.csv}')
+
+rule clean_input:
+    input: 
+        csv=INPUT_FILES,
+        script='scripts/clean.R'
+    output: 'working/cleaned_input.csv'
+    shell: 'Rscript {input.script} {output} {input.csv}'
+
